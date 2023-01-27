@@ -1,10 +1,17 @@
 # LeNet-5
-딥 러닝 분야의 Classification 논문들을 읽고 모델들을 구현하며 장단점을 설명합니다.
+본 페이지에서는 LeNet-5의 등장배경과 특징에 대해서 말하고자 합니다.
 
-
+###목차
+- [1. Data Science Bowl 2018?](#1-data-science-bowl-2018)
+- [2. U-Net](#2-u-net)
+- [3. 데이터 전처리](#3데이터-전처리)
+- [4. Evaluation Function](#4-evaluation-function)
+- [5. 네트워크 설계](#5-네트워크-설계)
+- [6. Make Prediction](#6-make-prediction)
+- [7. 결과 제출](#7-결과-제출)
 
 ---
-### 1. LeNet 이전의 Classification 작업
+## 1. LeNet 이전의 Classification 작업
 ---
 
 ![1](./img/fig1.PNG)
