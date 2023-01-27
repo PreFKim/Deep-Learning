@@ -49,19 +49,19 @@ LeNet-5의 구조는 입력층을 제외한 7개의 층으로 이루어져 있�
 입력 이미지는 32x32로 가운데 28x28 공간에 문자의 정보가 들어있는 공간이다.
 
 $$
-Cx = Convolution layer
+Cx = {Convolution layer}
 $$
 
 $$
-Sx = Sub-sampling layer
+Sx = {Sub-sampling layer}
 $$
 
 $$
-Fx = Fully connected layer
+Fx = {Fully connected layer}
 $$
 
 $$
-x = layer index
+x = {layer index}
 $$
 
 # C1 layer
