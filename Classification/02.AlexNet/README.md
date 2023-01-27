@@ -49,73 +49,38 @@ S=Z라고 한다면 기존의 CNN에서 흔하게 사용되는 Pooling 연산과
 
 하지만 S<Z일 때 filter가 겹치게 되면서 Pooling 연산을 진행하게 된다.
 
+논문에서는 S=2,Z=3으로 하여 실험을 진행했고 결과가 더 좋고 overfitting이 덜 일어났다.
+
+## 2.5 drop out
+학습을 하면서 특정 feature에 대해서 과한 학습이 이루어져 다른 feature에 대해 제대로 학습 되지 못하는 경우가 발생한다.
+
+이러한 경우 overfitting으로 이어질 수 있다.
+
+이를 방지하기 위해 무작위로 특정 feature를 비활성화 시켜 다른 feature들에 대해서 잘 학습 되도록 한다.
+
+본 논문에서는 Dropout 비율을 0.5로 하여 처음 두개의 FC Layer에 적용했다.
+
 ---
 
-## 3. LeNet-5 구조
+## 3. AlexNet 구조
 
-![2](./img/fig2.PNG)
+![1](./img/fig2.PNG)
 
-LeNet-5의 구조는 입력층을 제외한 7개의 층으로 이루어져 있다.
+AlexNet의 구조는 총 8개의 layer로 이루어져 있으며 1~5번째 layer는 Convolution Layer이며 나머지 3개는 Fully Connecter Layer이다.
 
-입력 이미지는 32x32로 가운데 28x28 공간에 문자의 정보가 들어있는 공간이다.
+논문에서는 입력 이미지의 크기는 224x224x3이라고 하지만 이는 잘못 입력한 것이고 실제로 사이즈는 227x227x3 이라고 한다.
 
-Cx = Convolution layer
-Sx = Sub-sampling layer
-Fx = Fully connected layer
-x = layer index
-
-## C1 layer
-C1 layer는 6개의 feature map들을 가지고 있는 Convolution layer이다.
-
-각각의 feature map에 있는 유닛들은 입력에 대해서 5x5 사이즈의 kernel과 연결되어 convolution 연산을 진행한다. 
-
-출력의 크기는 (28x28x6)이다.
-
-## S1 layer
-S2 layer는 6개의 feature map들을 가지고 있는 Sub sampling layer이다.
-
-각각의 feature들은 각각에 대응되는 입력 채널에 대해서 2x2 필터를 통해 4개의 픽셀 값에 대해 평균값으로 1x1의 픽셀 크기로 변한다.
-
-이러한 이유로 C1에 비해 절반의 크기를 가진다.
-
-출력의 크기는 (14,14,6)이다.
-
-## C3 layer
-C3 layer는 16개의 featue map들을 가지고 있는 Convoution layer이다.
-
-각각의 feature map들은 S2 feature map의 일부분과 각각 연결 되어 5x5 사이즈의 kernel과 연결되어 convolution 연산을 진행한다.
-
-![3](./img/table1.PNG)![4](./img/addition.PNG)
-
-논문에서는 각각의 feature map이 입력으로 가져오는 채널들이 달랐지만
-
-코드 구현에서는 그냥 간단하게 모든 채널을 입력으로 하는 것으로 하였다.
-
-출력의 크기는 (10,10,16)이다.
-
-## S4 layer
-
-S4 layer는 16개의 feature map들을 가지고 있는 Sub sampling layer이다.
-
-S4는 S2와 비슷하다.
-
-출력의 크기는 (5,5,16)이다.
-
-## C5 layer
-C5 layer는 120개의 feature map을 가지고 있는 Convolution layer이다.
-
-각각의 feature들은 S4의 출력을 입력으로 하여 5x5 사이즈의 kernel과 연결되어 convolution 연산을 진행한다.
-
-출력의 크기는 (1x1x120)이다.
-
-## F6 layer
-
-F6 layer는 84개의 feature map을 가지고 있는 Fully connected layer이다.
-
-이 F6 결과에 대해 softmax를 적용하여 최종적인 classification을 진행한다.
-
-출력의 크기는 ((1x1)x84)이다.
+또한 두 GPU를 사용해 병렬 연결하여 학습을 시킨다고 했지만 현재 GPU의 성능은 충분한 메모리를 가지고 있어 구현은 다르게 하였다.
 
 
+## 3.1 구조 특징
 
+
+- 마지막 FC Layer는 1000개의 class에 대한 classification을 하기 위한 layer로 softmax 함수를 적용한다.
+- Max pooling layer는 첫 번째 레이어와 두 번째 레이어 뒤에 적용되며 또한 다섯 번째 레이어 뒤에도 적용한다.
+- ReLU 함수는 모든 Convolution Layer 뒤와 FC Layer 뒤에 온다.
+
+## 최종 구조
+
+![2](./img/addition.PNG)
 ---
