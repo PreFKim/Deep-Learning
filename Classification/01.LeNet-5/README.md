@@ -48,30 +48,19 @@ LeNet-5의 구조는 입력층을 제외한 7개의 층으로 이루어져 있�
 
 입력 이미지는 32x32로 가운데 28x28 공간에 문자의 정보가 들어있는 공간이다.
 
-$
 Cx = Convolution layer
-$
-
-$
 Sx = Sub-sampling layer
-$
-
-$
 Fx = Fully connected layer
-$
-
-$
 x = layer index
-$
 
-### C1 layer
+## C1 layer
 C1 layer는 6개의 feature map들을 가지고 있는 Convolution layer이다.
 
 각각의 feature map에 있는 유닛들은 입력에 대해서 5x5 사이즈의 kernel과 연결되어 convolution 연산을 진행한다. 
 
 출력의 크기는 (28x28x6)이다.
 
-### S1 layer
+## S1 layer
 S2 layer는 6개의 feature map들을 가지고 있는 Sub sampling layer이다.
 
 각각의 feature들은 각각에 대응되는 입력 채널에 대해서 2x2 필터를 통해 4개의 픽셀 값에 대해 평균값으로 1x1의 픽셀 크기로 변한다.
@@ -80,7 +69,7 @@ S2 layer는 6개의 feature map들을 가지고 있는 Sub sampling layer이다.
 
 출력의 크기는 (14,14,6)이다.
 
-### C3 layer
+## C3 layer
 C3 layer는 16개의 featue map들을 가지고 있는 Convoution layer이다.
 
 각각의 feature map들은 S2 feature map의 일부분과 각각 연결 되어 5x5 사이즈의 kernel과 연결되어 convolution 연산을 진행한다.
@@ -93,7 +82,7 @@ C3 layer는 16개의 featue map들을 가지고 있는 Convoution layer이다.
 
 출력의 크기는 (10,10,16)이다.
 
-### S4 layer
+## S4 layer
 
 S4 layer는 16개의 feature map들을 가지고 있는 Sub sampling layer이다.
 
@@ -101,14 +90,14 @@ S4는 S2와 비슷하다.
 
 출력의 크기는 (5,5,16)이다.
 
-### C5 layer
+## C5 layer
 C5 layer는 120개의 feature map을 가지고 있는 Convolution layer이다.
 
 각각의 feature들은 S4의 출력을 입력으로 하여 5x5 사이즈의 kernel과 연결되어 convolution 연산을 진행한다.
 
 출력의 크기는 (1x1x120)이다.
 
-### F6 layer
+## F6 layer
 
 F6 layer는 84개의 feature map을 가지고 있는 Fully connected layer이다.
 
