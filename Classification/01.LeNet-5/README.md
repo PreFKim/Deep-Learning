@@ -6,9 +6,9 @@
 ---
 ### 1. LeNet 이전의 Classification 작업
 ---
-$$
-![1](../img/fig1.PNG)
-$$
+
+![1](./img/fig1.PNG)
+
 기존에는 Pattern을 수식적으로 확인하여 이를 Classification module에 입력으로 넣어 Classifacation을 했다.
 
 그 중 한가지 예를 들면 다음과 같다.
