@@ -1,7 +1,6 @@
-# LeNet-5
+# [LeNet-5](https://axon.cs.byu.edu/~martinez/classes/678/Papers/Convolution_nets.pdf)
 본 페이지에서는 LeNet-5의 등장배경과 특징에 대해서 말하고자 합니다.
 
-[논문](https://axon.cs.byu.edu/~martinez/classes/678/Papers/Convolution_nets.pdf)
 ---
 ## 1. LeNet 이전의 Classification 작업
 
