@@ -48,6 +48,7 @@ pooling layer의 ZxZ 사이즈의 filter의 중간 좌표로 부터 s 픽셀만�
 S=Z라고 한다면 기존의 CNN에서 흔하게 사용되는 Pooling 연산과 다를게 없다.
 
 하지만 S<Z일 때 filter가 겹치게 되면서 Pooling 연산을 진행하게 된다.
+
 ---
 
 ## 3. LeNet-5 구조
