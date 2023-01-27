@@ -51,12 +51,15 @@ LeNet-5의 구조는 입력층을 제외한 7개의 층으로 이루어져 있�
 $$
 Cx = Convolution layer
 $$
+
 $$
 Sx = Sub-sampling layer
 $$
+
 $$
 Fx = Fully connected layer
 $$
+
 $$
 x = layer index
 $$
