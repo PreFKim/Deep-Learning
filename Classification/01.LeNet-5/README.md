@@ -22,7 +22,7 @@
 
 - 2. 특징 추출 과정에서 이러한 특징들을 어떻게 특징을 추출하는지에 따라 성능이 크게 달라진다.
 
-- 3.새로운 문제(새로운 특징이 추가적으로 필요하거나 기존과는 다른 패턴이 보이는 경우)에는 다시 시스템을 구축해야함
+- 3. 새로운 문제(새로운 특징이 추가적으로 필요하거나 기존과는 다른 패턴이 보이는 경우)에는 다시 시스템을 구축해야함
 
 ---
 ## 2. LeNet-5
@@ -50,17 +50,25 @@ LeNet-5의 구조는 입력층을 제외한 7개의 층으로 이루어져 있�
 
 $$
 Cx = Convolution layer
+$$
+$$
 Sx = Sub-sampling layer
+$$
+$$
 Fx = Fully connected layer
+$$
+$$
 x = layer index
 $$
 
+# C1 layer
 C1 layer는 6개의 feature map들을 가지고 있는 Convolution layer이다.
 
 각각의 feature map에 있는 유닛들은 입력에 대해서 5x5 사이즈의 kernel과 연결되어 convolution 연산을 진행한다. 
 
 출력의 크기는 (28x28x6)이다.
 
+# S1 layer
 S2 layer는 6개의 feature map들을 가지고 있는 Sub sampling layer이다.
 
 각각의 feature들은 각각에 대응되는 입력 채널에 대해서 2x2 필터를 통해 4개의 픽셀 값에 대해 평균값으로 1x1의 픽셀 크기로 변한다.
@@ -69,6 +77,7 @@ S2 layer는 6개의 feature map들을 가지고 있는 Sub sampling layer이다.
 
 출력의 크기는 (14,14,6)이다.
 
+# C3 layer
 C3 layer는 16개의 featue map들을 가지고 있는 Convoution layer이다.
 
 각각의 feature map들은 S2 feature map의 일부분과 각각 연결 되어 5x5 사이즈의 kernel과 연결되어 convolution 연산을 진행한다.
@@ -81,21 +90,26 @@ C3 layer는 16개의 featue map들을 가지고 있는 Convoution layer이다.
 
 출력의 크기는 (10,10,16)이다.
 
+# S4 layer
+
 S4 layer는 16개의 feature map들을 가지고 있는 Sub sampling layer이다.
 
 S4는 S2와 비슷하다.
 
 출력의 크기는 (5,5,16)이다.
 
+# C5 layer
 C5 layer는 120개의 feature map을 가지고 있는 Convolution layer이다.
 
 각각의 feature들은 S4의 출력을 입력으로 하여 5x5 사이즈의 kernel과 연결되어 convolution 연산을 진행한다.
 
 출력의 크기는 (1x1x120)이다.
 
-C6 layer는 84개의 feature map을 가지고 있는 Fully connected layer이다.
+# F6 layer
 
-이 C6 결과에 대해 softmax를 적용하여 최종적인 classification을 진행한다.
+F6 layer는 84개의 feature map을 가지고 있는 Fully connected layer이다.
+
+이 F6 결과에 대해 softmax를 적용하여 최종적인 classification을 진행한다.
 
 출력의 크기는 ((1x1)x84)이다.
 
