@@ -118,15 +118,6 @@ Dense block의 결과가 m개의 feature map을 가지고 있을 때 transition 
 또한 bottleneck 과 θ<1인 모델을 DenseNet-BC라고 하였다.
 
 
-## 4 상세 구현
-구조는 주로 VGGNet의 영향을 받았다.
-
-Conv 연산의 Kernel size는 주로 3x3을 사용하였고
-
-Down sampling 연산은 stride를 2로 지정한 Conv 연산을 통해 구현한다.
-
-
-
 ## 4. 상세구조
 
 ![4](./img/table1.PNG)
