@@ -23,7 +23,10 @@ Decoder 과정에서 Encoder 부분에서 얻어낸 정보(feature map)를 Skip 
 ---
 ## UNet 기반의 다른 모델들
 
-![3](./img/unet%2B%2B.png) ![4](./img/unet3%2B.png)
+![3](./img/unet%2B%2B.png) 
+
+![4](./img/unet3%2B.png)
+
 두 모델은 대표적인 UNet 기반 모델로 각각 UNet++와 UNet3+이다.
 
 두 모델은 공통적으로 UNET 모델의 Skip connection을 redesign 하여 Encoder 와 Decoder 사이의 위치정보와 같은 의미론적 차이를 줄여 더 정확한 세그멘테이션을 가능하게 하였다.

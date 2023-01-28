@@ -4,8 +4,11 @@
 ---
 
 ![1](./img/fig1.PNG)
+
 ![2](./img/eqn1.PNG)
+
 ![3](./img/fig2.PNG)
+
 ![4](./img/fig3.PNG)
 
 ---
