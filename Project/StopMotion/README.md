@@ -4,6 +4,8 @@
 
 AI Model로는 Layer UNET을 사용하였고 모델의 활용 과정은 아래와 같습니다.
 
+이때 아래의 이미지에서 이미지 합성의 의미는 bitwise 연산을 의미합니다.
+
 ![1](./image.PNG)
 ![2](./image2.PNG)
 
