@@ -16,11 +16,11 @@ Imagenet에서 AlexNet보다 50배 적은 파라미터의 수로 비슷한 성�
 
 - More efficient distributed training
 
--- server 사이의 communication은 distributed CNN training에서 의 확장성을 제한하는 요소이다.
+1. server 사이의 communication은 distributed CNN training에서 의 확장성을 제한하는 요소이다.
 
--- data parallel training에서 communication 오버헤드는 직접적으로 모델의 파라미터 수의 일부분으로 연결된다.
+2. data parallel training에서 communication 오버헤드는 직접적으로 모델의 파라미터 수의 일부분으로 연결된다.
 
--- 요약하면 작은 모델이 학습 되는 것이 더 빠른데 그 이유는 communication이 적기때문에 파라미터가 적어지기 때문이다.
+3. 요약하면 작은 모델이 학습 되는 것이 더 빠른데 그 이유는 communication이 적기때문에 파라미터가 적어지기 때문이다.
 
 
 - Less overhead when exporting new models to client
