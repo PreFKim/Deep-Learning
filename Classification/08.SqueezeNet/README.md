@@ -25,111 +25,187 @@ Imagenet에서 AlexNet보다 50배 적은 파라미터의 수로 비슷한 성�
 
 - Less overhead when exporting new models to client
 
+    1. 자율주행에서 그들의 새로운 모델을 주기적으로 server로부터 소비자의 차로 복사한다. 이를 over the air update라고 부른다.
+
+    2. ALexNet은 server에서 차까지 240MB의 communication를 필요로 한다.
+
+    3. 작은 모델은 더 적은 communication을 필요로하고 더 많은 업데이트가 가능하게 했다.
+
 - Feasible FPGA and embedded deployment
+    1. FPGA들은 대부분 10MB 보다 작은 on-chip memory이고 no off chip memory또는 저장소이다.
+
+    2. 확실히 작은 모델은 영상 프레임이 real time으로 송출되는 동안 memory band-with에 병목이 되지 않고 FPGA에 직접적으로 저장되어질 수 있다. 
+
+    3. 더 나아가 CNN을 ASIC에 적용하는 동안 충분히 작은 모델은 on cipp에 직접적으로 저장되고 작은 모델은 ASIC를 중간에 멈추는 것 없이 가능하게 했다.
 
 
-## 2. Problem Formulation
 
-![3](./img/eqn2.PNG)
+## 2. MODEL COMPRESSION
+기존의 모델들은 각 레이어의 filter를 선택하는 것이 트렌드였고
 
-모든 모델에서 기존의 conv연산 방법(Resnet에서의 residual method와 같은)은 변화주지 않으면서 채널의 수(C),레이어의 수(L), 해상도(H,W)에 변화를 줄 것이다.
+다양한 고수준의 빌딩 블럭과 모듈 그리고 여러 conv layer를 구성하면서 제안되어져왔다.
 
-즉 제한된 자원 내에서 H,W,C,L에 변화를 주어 모델의 성능을 최대화 하는 방법을 찾는다는 것이다.(식(2)에서 N(d,w,r)은 모델 최종 결과라고 보면 된다.F는 conv연산,relu와 연산이고 X는 초기 입력이다.d , w, r은 각각 깊이,너비,해상도에 대한 coefficient이다.)
+많은 모듈들은 완전한 network를 형성하기위해 아마 addtional ad-hoc layer와 합쳐졌다.
 
-식(2)의 주요한 문제는 d,w,r은 서로 종속적이기에 하나가 변하면 다른 요소도 변하기에 어려움이 생겨 기존의 방법들에서는 하나만을 변경하여 성능을 향상시키려 하였다.
+### CNN MICROARCHITECTURE
+특별한 organization과 individual module들의 차원을 언급하기위해 CNN microarchitecture를 정의하였다,
 
-이를 고려하여 d,w,r을 고려하는 방법은 아래와 같다.
+### CNN MACROARCHITECTURE
+googlelenet의 inception module, vgg net의 레이어 쌓는 것 등을 macro architecture라고한다.
 
-### 2.1 Depth(d)
+### NEURAL NETWORK DESIGN SPACE EXPLORATION
+design space는 microarchitecture,macro architecture,solver,그리고 하이퍼 파라미터 등을 얘기한다.
 
-Network의 깊이를 조정하는 것은 기존에 많이 사용하던 방식이다.
+기존의 논문들은 성능 향상에 도움은 주었지만  NN design shape의 모양에 대한 intuition을 주진 못했다
 
-깊은 convnet은 풍부하고 복잡한 feature들을 잘 확보하고 새로운 작업에서도  괜찮은 generalize가 된다.
+Fire block은 CNN구조를 만드는데 새로운 building block 이다
 
-그러나 깊은 network는 vanishing gradient문제가 발생한다.
+## 3. ARCHITECTURAL DESIGN STRATEGIES
+SqueezeNet의 목적은 적은 수의 파라미터로도 경쟁가능한 정확도를 유지하는 것이다. 그 방법에는 세가지 전략이 있다.
 
-이런 문제는 skip-connectio과 BN을 통해 어느정도 해결이 되었지만 
-Resnet-152와 Resnet-1000이 성능에 큰 차이가 보이지 않을 만큼 제한이 있다.
+전략 1. 3x3filter를 1x1 filter로 바꾸는 것
+
+전략 2. 3x3 filter의 input 채널의 수를 줄이는 것
+
+전략 3. conv layer가 더 많은 activation map을 가지게 하기 위해서 downsample은 network에서 뒤에 배치한다.
+
+전략 1과 2는 정확도를 어느정도 보장하면서 파라미터의 수를 줄인 것에 대한 것
+전략 3은 제한된 파라미터 수에서 정확도를 최대화 하는 것
+
+### 3.1 Strategy 1.
+1x1 필터보다 3x3필터가 9배 더 많은 파라미터를 사용한다.
+
+이러한 이유로 파라미터를 줄이기 위해서 3x3 filter대신 1x1 filter를 사용한다.
+
+### 3.2 Strategy 2.
+레이어 내의 전체 파라미터 수는 (input channel)*(output channel)*(filtersize^2)*(H*W)이다. 
+
+전략 1에서 필터수를 줄인 상태이므로 파라미터 수를 줄이기 위해서는  input channel의 수를 줄이는 것이다
+
+본 논문에서는 squeeze layer를 사용하여 input channel의 사이즈를 줄였다.
+
+### 3.3 Strategy 3.
+
+conv network에서, 각각의 레이어는 output activation map을 1x1 conv 또는 그보다 큰 NxN conv연산으로 만든다.
+Height와 width는 adtivation map에 의해 정해진다.
+
+activation map은 다음에 의해 제어된다.
+(1) input data의 크기
+(2) CNN 구조에서 downsample을 할 위치(어떤 layer에서 할지)
+
+Down sampling이 stride가 1보다 큰 값으로 conv또는 pooling layer에서 진행되는데
+
+초반의 layer 에서 stride가 큰 경우 , 대부분의 레이어는 작은 activation map을 가질 것이다.
+
+반대로, 네트워크의 대부분이 srtide가 1일경우,그리고 stride들이 1보다 큰 경우가 네트워크의 끝에 집중이 된다면 (stride가 크면 이미지가 줄어드는 것을 말함 네트워크의 끝부분에서 이미지의 크기가 줄어드는 것이 많아진다면)
+
+많은 레이어는 큰 activation map을 가질 것이다.
+
+큰 activation map들(downsampling을 뒤쪽에 배치하기 때문에)이 높은 분류 정확도를 가진다는 것이 우리의 intuition이다.
 
 
-### 2.2 Width(w)
 
-Network의 너비를 조정하는 것은 작은 network에서 흔히 사용한다.
+## 4 Fire Module
 
-너비가 넓은 network들은 fine-grained된 feature들을 얻어낼 수 있고 학습하기도 쉽다.
+![1](./img/1.PNG)
 
-그러나 넓은 network이면서 깊이가 얕은 network는 high level feature들을 얻기 힘들다.
+fire module은 squeeze conv layer(1x1flter를 가진 conv layer)레이어와 expand layer(1x1과 3x3 conv filter를 가진 conv layer)로 이루어졌다.
 
-### 2.3 Resolution(r)
+fire module에서 1x1 filter의 사용은 3.1에서 전략 1을 적용하기 위한 것이다.
 
-고해상도의 input image의 경우 convnet은 fine-grained 된 패턴을 얻을 수 있다.
+S(1x1) ,E(1x1) and E(3x3)은 Squeeze layer와 Expand layer의 필터의 수를 얘기하는 것이고 하이퍼 파라미터이다.
 
-기존의 convnet은 224x224로 시작해 정확성을 위해 480x480까지 시도를 하였고 Gpipe라는 모델은 이 해상도로 sota모델이 되었다.
+e(1x1)는 expand layer에서 1x1filter의 수를 얘기하는 것이고
 
-600x600같은 고해상도는 object detection에서 자주 쓰인다.
+e(3x3)은 expand layer에서 3x3의 필터의 수를 얘기하는 것이다.
 
-### 2.4 d,w,r에 대한 성능관계
+S(1x1)는 (E(1x1)+e(3x3))보다는 항상 작아야한다.
+
+## 5. THE SQUEEZENET ARCHITECTURE
+![2](./img/2.PNG)
+![3](./img/table1.PNG)
+
+Squeezenet은 standalone layer(conv1)로 시작하고 8개의 Fire-module이 따라오고(fire2_9) 최종 conv layer(conv10)로 끝낸다.
+
+fire-module마다 필터의 수를 증가시킨다.
+
+max-pooling 을 stride 2로 conv1 fire4 fire8 conf10 이후에 진행한다.
+
+상대적으로 pooling을 network 뒤에 배치하는 것은 전략 3을 시행하려는 것이다.
+
+### 5.1 OTHER SQUEEZENET DETAILS
+
+Expand layer의 1x1과 3x3 필터로부터 나온 output은 같은 크기이다.(zero padding을 이용해 conv연산을 진행)
+
+ReLU는 squeze와 expand layer뒤에 적용된다.
+
+Drop Output은 0.5의 비율로 fire 9 module 뒤에 적용된다.
+
+NiN 구조에 영향을 받아서 FC Layer가 없다.
+
+Expand layer의 1x1conv와 3x3conv는 Squeeze layer의 결과를 입력으로 받고 1x1conv와 3x3conv의 결과를 concatenate하여 Fire-module의 결과로 한다.
+
+### 5.2 CNN MICROARCHITECTURE METAPARAMETERS
+
+Fire module은 S(1x1),E(1x1),E(3x3) 의 세가지 하이퍼 파라미터로 이루어져있다.
+
+본 논문은 base(e)를 fire module에서 expand filter의 수라고 정의한다.
+
+모든 freq Fire module의 이후에, expand filter의 수를 incr(e)만큼 증가시킨다.
+
+Fire modul i에 대해서 expand filter의 수 Ei = base(e)+(incr(e)*floor(i/freq))이다.
+
+Ei = Ei,1x1 + Ei,3x3으로 이루어져 있다.
+
+Ei,3x3 = Ei*pct(3x3) 이고 Ei,1x1 = Ei*(1-pct(1x1))로 이루어져 있다.
+
+pct(3x3) = [0,1]
+fire module의 squeeze layer의 필터 수를 정하기 위해 squeeze ratio(SR[0,1])을 정했다. 
+
+squeeze 필터 수 si,1x1 = ei*SR이다.
+
+본 논문에서는 base(e)=128 ,incr(e)=128 pct(3x3)=0.5, freq=2,SR=0.125로 지정햇다.
+
+
+### 5.3 SQUEEZE RATIO, TRADING OFF 1X1 AND 3X3 FILTERS
 
 ![4](./img/3.PNG)
 
-Observation 1 - network의 너비 깊이 해상도의 어떤 차원이라도 scaling up하는 것은 정확성을 향상시키지만 , 크게 변화시킨 모델들에서는 정확성의 향상이 점점 줄어들어 수렴하게 된다.
+SR과 pct의 값에 의한 성능 변화는 다음 아래의 사진을 보고 비교하면 된다.
 
-## 3. Compound Scaling
+### 5.4 CNN MACROARCHITECTURE DESIGN SPACE EXPLORATION
 
-![5](./img/4.PNG)
+microarchitecture 수준에서 디자인 공간에 대해서 연구함
 
-해상도가 커질수록 커진 이미지에 대해서 더 많은 feature들과 패턴을을 찾아내기 위해서 네트워크의 너비와 깊이를 같이 늘려야한다. 이러한 관계는 Fig(4)에서 잘 보여진다.
+본 논문의 bypass 구조에는 bypass connection을 fire module 3,5,7,9에 적용함
 
-d와 r의 변화없이 w만 변화시킬 경우 성능의 향상이 빠르게 수렴된다.
+input 과 output에 대해서 resudual learning을 적용함
 
-d와 r과 함께 w를 변화할 경우에는 같은 FLOPS로도 더 나은 성능을 보인다.
+Fire 4의 input을 Fire 2의 output + Fire 3의 output으로 함
 
-Observation 2 - 더 나은 정확도와 효율성을 보여주려면,CNN을 조정 하는 중에 network의 너비,깊이,해상도 값 사이에서 균형점을 찾는 것이 좋다.
+이를 통해 fire modele의 파라미터에 정규화를 적용에 대한 변화를 준다.
 
-기존에 이미 balance를 찾는 노력은 있었지만 정해진 방식대로 balance를 찾는 것이 아니기에 계속 수정을 해주었다.
+### 5.5 Simple,Complex Bypass connection
 
-본 논문에서는 해당 방식을 식으로 만들어 균일하게 조정을 하려고 한다.(φ라는 compound coefficient를 사용)
+![5](./img/table3.PNG)
 
-Φ값은 사용자가 지정할 수 있는 하이퍼 파라미터로 얼마나 자원을 사용할지에 따라 정할 수 있다.
+input 채널의 수와 output 채널의 수는 같아지는 경우에는
 
-![6](./img/eqn3.PNG)
+절반의 fire modul만 bypass connectio을 가진다. (simple bypass)
 
-식(3)에서 a,B,r는 small grid search로 인해 정해지는 constant이다.
+같은 수의 채널이 아니라면, complex bypass connection을 사용한다
 
-φ 는 a,B^2,r^2와 비례한다.
+simple bypas는 채널의 변화가 없기에 일반적인 skip connection이지만 
 
-이때 FLOPS는 2^ φ와 비례한다.
+complax bypass는 I/O 채널의 수를 같게하는 1x1 conv layer를 포함한 것이다.
 
+complex bypass는 simple bypass와는 다르게 추가적인 파라미터를 요구한다.
 
+SR이 0.125인 것이 의미하는 것은 expand layer의 입력층의 갯수를 8배 줄인다는 것을 말한다.
 
-## 4. EfficientNet Architecture
-모델 scaling이 baseline network의 연산 Fi(x)를 변화시키지 않기 때문에 좋은 baseline network를 찾는 것이 중요하다.
+이런 차원의 급격한 줄임때문에 , 정보의 양이 squeeze layer를 지나면서 줄어든다.
 
-Scaling method를 기존의 모델에 적용해 성능을 평가한다.
-
-정확도와 FLOPS를 둘다 평가하기 위해서 optimizer를 ACC(m)x[FLOPS(m)/T]^w로 설정하였다.
-
-ACC(m)과 [FLOPS(m)/T]^w은 각각 모델 m의 정확도와 FLOPS를 의미한다, T는 목표 FLOPs이고 w=-0.07은 FLOPS와 accuracy 사이에 trade off를 제어하기 위한 하이퍼 파라미터다
-
-### 4.1 EfficientNet Architecture(EfficientNet-B0)
-
-![7](./img/table1.PNG)
-
-architecture는 MnasNet을 참고하여 만들었다.
-
-EfficientNet의 주요한 building block은 mobile inverted bottleneck Mbconv이고, 또한 SE optimization을 같이 사용했다.
-
-compound scaling 방법을 다음과 같은 두가지 step을 적용하여(B1~B7을 얻음).
-
-STEP 1: φ를 1로 고정하고,두배 더 많은 리소스를 사용가능하다고 가정한다,그리고 a,B,r에 대해 식 2와 3을 기반으로 small grid search를 진행한다,특히  EfficientNet-B0의 가장 좋은 값은 a=1.2,B=1.1,r=1.15인걸 a'B^2'r^2=2에서 찾았다.
-
-STEP 2:  a,B,r을 constants로써 고정했고 식 3을 사용하여 다른 φ과 함께 baselin network를 scale up 하였다.
-
-a,B,r를 찾는 것은 효율적이나 커진 모델에서는 search 비용이 커졌다.
-
-(step1)방법에서 작은 baseline networ에서 search를 한번만 하면서 이러한 문제를 해결했다.
-
-그리고 모든 다른 모델들에서 같은 scaling coefficient들을 사용했다.(step2)
+그러나 bypass connection을 추가하면서,squeeze layer 주변에서 정보의 흐름을 가능하게 하였다.
 
 
 
