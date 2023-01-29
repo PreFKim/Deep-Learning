@@ -6,7 +6,7 @@ ResNet 50 모델을 사용해서 학습했다.
 
 ## 학습 결과
 
-![0](./img/4.jpg)
+![0](./img/4.png)
 
 ### Test
-![1](./img/1.jpg)![2](./img/2.jpg)![3](./img/3.jpg)
+![1](./img/1.PNG)![2](./img/2.PNG)![3](./img/3.PNG)
