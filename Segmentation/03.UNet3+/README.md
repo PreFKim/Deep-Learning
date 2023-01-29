@@ -73,4 +73,17 @@ Argmax를 통해 0또는 1로 변환한다.
 
 이를 통해 물체가 없다고 판단하면 모두 0이 되어 False positive일 확률이 줄어든다.
 
+## 2.3 Deep supervision
+
+UNET++와는 다르게 Deep Supervison을 모든 Decoder 블럭에 대해서 적용하고
+
+각각의 Decoder 블럭은 3x3 conv를 적용한 후 bilinear upsample 이후에 sigmoid 함수를 적용한다.
+
+
+## 2.4 Hybrid loss
+
+애매한 경계에 높은 가중치를 주기위해 유사도를 확인하는 MS-SSIM을 Loss함수로 두었다.
+
+Focal Loss,MS-SSIM loss,IoU Loss를 같이 사용하면서 pixel,patch,map level의 세가지를 확인했다.
+
 ---
