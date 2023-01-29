@@ -1,6 +1,6 @@
 # 해양 쓰레기 Classification
 
-개인 classification 공부라고 볼 수도 있지만 어떤 모델에서도 데이터 파이프라인 구축이 가능함을 표현하기 위함이다.
+개인 classification 공부
 
 ResNet 50 모델을 사용해서 학습했다.
 
