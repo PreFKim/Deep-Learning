@@ -1,6 +1,8 @@
 # [EfficientNet](https://arxiv.org/abs/1905.11946)
 본 페이지에서는 EfficientNet의 등장배경과 특징에 대해서 말하고자 합니다.
 
+코드는 아직 부족한 점이 많고 조금 더 공부를 해서 알아보아야 할 것 같습니다.
+
 ---
 ## 1. EfficientNet 특징
 
