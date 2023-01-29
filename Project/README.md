@@ -23,7 +23,3 @@ CBCT 3D 치아 이미지에 대해서 Segmentation 데이터 셋을 구축한 �
 이와 관련된 활동으로는 현재 UNET의 skip connection 구조를 변경해 성능을 UNET3+보다 향상시킨 내용과 함께 전자공학회 추계학술대회에서 내용에 대해서 발표 했고
 
 이 내용을 토대로 현재 논문을 제출하여 심사 중에 있다.
-
-## 해양 쓰레기 Classification
-
-해양 쓰레기 Dataset에 대하여 Classification 을 진행한다.
