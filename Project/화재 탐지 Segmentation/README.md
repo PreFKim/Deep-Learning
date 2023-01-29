@@ -8,6 +8,13 @@
 
 GTX 1060 그래픽 카드로 초당 10장의 이미지를 처리할 수 있다.
 
+## Real time 실행영상
+
+![video](./result/youtube.PNG)[https://www.youtube.com/embed/d2gssF8AygE]
+
+핸드폰 카메라와 컴퓨터를 연결하여 실시간으로 Segmentaion 되는 것을 표현함
+
+카메라는 화재 영상을 찍고 있다.(실습으로 불을 내는 환경을 찾기 어렵기 때문에 이렇게 했습니다.)
 
 ## 결과
 
