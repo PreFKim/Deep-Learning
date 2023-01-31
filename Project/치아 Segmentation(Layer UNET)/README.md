@@ -1,5 +1,5 @@
 # Teeth Segmentation Project(논문)[Layer UNET]
-
+![Layer UNET](https://github.com/PreFKim/Deep-Learning/tree/main/Segmentation/04.Layer%20UNet)
 3D CBCT 이미지에 대해서 Z축을 기준으로 slice한 다음 각각의 이미지를 모델에 학습시키는 방법을 사용하였고
 
 치아 이미지에 대해서 치아와 턱뼈를 분리해내고 치아만을 Segmentation하는 방법을 사용하였다.
