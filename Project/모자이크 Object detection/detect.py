@@ -159,7 +159,7 @@ def run(
         # Process predictions
 
 
-        for i, det in enumerate(pred):  # per image
+        for i, det in enumerate(pred):  # 하나의 이미지 또는 프레임에 대한 예측
 
             position = [] # 각 객체에 대한 좌표 x1,y1,x2,y2
 
@@ -171,12 +171,13 @@ def run(
                 p, im0, frame = path, im0s.copy(), getattr(dataset, 'frame', 0)
 
             p = Path(p)  # to Path
-            save_path = str(save_dir / p.name)  # im.jpg
-            txt_path = str(save_dir / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # im.txt
-            s += '%gx%g ' % im.shape[2:]  # print string
+            save_path = str(save_dir / p.name)  # im.jpg , 저장될 이미지 파일
+            txt_path = str(save_dir / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # im.txt ,검출된 객체에 대한 클래스 와 좌표 정보 저장될 파일임
+            s += '%gx%g ' % im.shape[2:]  # print string , 현재 진행상황 표시
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
             imc = im0.copy() if save_crop else im0  # for save_crop
-            annotator = Annotator(im0, line_width=line_thickness, example=str(names))
+            annotator = Annotator(im0, line_width=line_thickness, example=str(names)) #im0를 가지고 annotation 준비
+
 
             if len(det):
                 # Rescale boxes from img_size to im0 size
@@ -190,13 +191,14 @@ def run(
                     s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
 
                 # Write results
-                m = im0.copy()
+
+                m = im0.copy() ##모자이크 이미지를 만들어주기 위해 이미지를 줄이고 키움
                 m = cv2.resize(m,(im0.shape[1]//10,im0.shape[0]//10))
                 m = cv2.resize(m,(im0.shape[1],im0.shape[0]),interpolation=cv2.INTER_AREA)
 
                 
                 for *xyxy, conf, cls in reversed(det):
-                    if save_txt:  # Write to file
+                    if save_txt:  # Write to file 각 객체의 클래스 정보 좌표 정보 저장 과정
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
                         with open(f'{txt_path}.txt', 'a') as f:
@@ -204,18 +206,19 @@ def run(
 
                     if save_img or save_crop or view_img:  # Add bbox to image
                         c = int(cls)  # integer class
-                        if mosaic_list[c] == 1:
-                            position.append(xyxy)
-                        label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
-                        if hide_annotation == False:
-                            annotator.box_label(xyxy, label, color=colors(c, True))
+                        if mosaic_list[c] == 1: #해당 클래스가 모자이크 하기로 됐다면
+                            position.append(xyxy) #좌표 정보 저장
+                        label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}') # 바운딩 박스에 객체명 표시
+                        if hide_annotation == False: 
+                            annotator.box_label(xyxy, label, color=colors(c, True))# 바운딩 박스 표시
                     if save_crop:
-                        save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
+                        save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True) # 해당 객체 부분만 이미지 저장
 
             # Stream results
             
-            im0 = annotator.result()
-            for j in range(len(position)): 
+            im0 = annotator.result() #im0에 annotator의 결과를 입력
+
+            for j in range(len(position)): # 각 객체의 좌표값을 토대로 모자이크 처리
                 for k in range(len(position[j])):
                     position[j][k] = int(position[j][k])
                 im0[position[j][1]:position[j][3],position[j][0]:position[j][2],:] = m[position[j][1]:position[j][3],position[j][0]:position[j][2],:]
@@ -225,7 +228,7 @@ def run(
                     windows.append(p)
                     cv2.namedWindow(str(p), cv2.WINDOW_NORMAL | cv2.WINDOW_KEEPRATIO)  # allow window resize (Linux)
                     cv2.resizeWindow(str(p), im0.shape[1], im0.shape[0])
-                cv2.imshow(str(p), im0)
+                cv2.imshow(str(p), im0) #im0값을 출력
                 cv2.waitKey(1)  # 1 millisecond
 
             # Save results (image with detections)
