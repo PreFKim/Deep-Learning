@@ -201,7 +201,8 @@ def parse_opt():
     seen, windows, dt = 0, [], (Profile(), Profile(), Profile())
 ```
 
-모델이 잘 작동하도록 임의의 값 넣어줌
+모델을 그냥 진행하면 delay가 생기기도 하는데 모델을 장치에 통과시킴으로 어느정도 해결이 가능하게 됨
+
 
 ``` python3
     for path, im, im0s, vid_cap, s in dataset:
@@ -225,6 +226,17 @@ def parse_opt():
 ```
 
 구축된 데이터에 대해서 입력이미지 im을 전처리 해주어 model의 input으로 넣어주고 non max suppression을 적용한다.
+
+non_max_suppression은 모델이 예측한 객체에 대한 많은 bbox중 제일 좋은 것을 고르고 나머지는 제거하는 것이다.
+
+알고리즘은 다음과 같다.
+1. bbox별로 Confidence threshold 이하의 bounding box는 제거한다.
+2. 가장 높은 confidence score를 가진 bbox 순으로 내림차순 정렬한다.
+3. 가장 높은 confience score를 가진 bbox와 겹치는 bbox를 모두 조사하여 두 bbox에 대한 IoU가 특정 threshold 이상인 bbox를 모두 제거한다.
+
+4. 남은 bbox만 전달.
+
+3. 에서 IoU 가 특정 threshold가 일정 이상이면 같은 물체를 나타내는 거라고 판단하는 것임
 
 ```python3
         for i, det in enumerate(pred):  # 하나의 이미지 또는 프레임에 대한 예측
