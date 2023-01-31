@@ -1,4 +1,4 @@
-# Teeth Segmentation Project(논문)
+# Teeth Segmentation Project(논문)[Layer UNET]
 
 3D CBCT 이미지에 대해서 Z축을 기준으로 slice한 다음 각각의 이미지를 모델에 학습시키는 방법을 사용하였고
 

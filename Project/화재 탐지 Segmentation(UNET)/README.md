@@ -1,4 +1,4 @@
-# 화재 탐지 Segmentation
+# 화재 탐지 Segmentation(논문)[UNET]
 
 화재를 조금 더 정밀하게 탐지하기 위해 Segmentation 모델을 사용했다.
 

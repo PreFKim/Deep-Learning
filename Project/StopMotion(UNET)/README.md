@@ -1,4 +1,4 @@
-# StopMotion Project(팀 프로젝트)
+# StopMotion Project(팀 프로젝트)[UNET]
 
 옷이 공중에 떠다니면서 춤을 추는 스탑모션을 딥러닝을 통해 구현하고자 했습니다.
 
