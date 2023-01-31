@@ -1,6 +1,6 @@
-# StopMotion Project(팀 프로젝트)[UNET]
+# StopMotion Project(팀 프로젝트)[Layer UNET]
 
-[LayerUNET](https://github.com/PreFKim/Deep-Learning/tree/main/Segmentation/04.Layer%20UNet)
+[LayerUNET에 대한 설명](https://github.com/PreFKim/Deep-Learning/tree/main/Segmentation/04.Layer%20UNet)
 
 옷이 공중에 떠다니면서 춤을 추는 스탑모션을 딥러닝을 통해 구현하고자 했습니다.
 
