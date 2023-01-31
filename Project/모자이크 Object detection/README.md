@@ -4,6 +4,8 @@
 
 Yolo V5를 사용해서 객체를 탐지해서 해당 영역을 모자이크 처리하는 방식을 사용했습니다.
 
+![intro](./img/intro.PNG)
+
 구별해내는 클래스는 총 6개로 다음과 같습니다.
 
 Classes:
@@ -22,11 +24,12 @@ Classes:
 
 ## 사용 방법
 
-1. yolov5 클론
 ```
 !git clone https://github.com/ultralytics/yolov5  
 ```
-을 사용해 yolov5코드를 클론합니다.
+
+1. yolov5 클론
+위의 코드를 사용해 clone을 해줍니다.
 
 2. detect.py 대체
 yolo v5내에 있는 detect.py를 제 깃허브에 있는 detect.py로 대체합니다.

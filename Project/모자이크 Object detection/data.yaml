@@ -1,0 +1,5 @@
+names: ['knife', 'long_gun', 'pistol','face','smoking','tatoo']
+nc: 6
+train: ./weaponsdata-4/train/images
+val: ./weaponsdata-4/valid/images
+test: ./weaponsdata-4/test/images
