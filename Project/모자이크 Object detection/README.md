@@ -24,7 +24,7 @@ Classes:
 
 추가적으로 일부 모델만이 사용 가능한 것이 아닌 모든 모델에 대해서 사용이 가능합니다.
 
-## 사용 방법
+## 1. 사용 방법
 
 ```
 !git clone https://github.com/ultralytics/yolov5  
@@ -38,7 +38,7 @@ yolo v5내에 있는 detect.py를 제 깃허브에 있는 detect.py로 대체합
 
 3. 원하는 모델을 사용하여 --obj 파라미터로 원하는 객체만을 모자이크 할 수 있습니다.
 
-## 사용 코드와 실행 영상
+## 2. 사용 코드와 실행 영상
 ```
 --obj [] #모든 객체에 대해서 모자이크를 처리 
 --obj [-1] #모든 객체에 대해서 모자이크를 처리하지 않음
@@ -74,15 +74,15 @@ D:\anaconda3\python.exe C:\Users\fhsdn\Desktop\yolov5\detect.py --weights C:/Use
 
 [![practical](./img/practical.PNG)](https://youtu.be/N6j2c6EkgZ8)
 
-## 데이터 셋 구성
+## 3. 데이터 셋 구성
 
 RoboFlow라는 사이트를 이용해 각 객체에 대한 데이터 셋을 얻은 후(dataset 폴더에 있음) 데이터 셋의 클래스 넘버를 수정하고 한 폴더 내로 합쳐 학습을 진행 했습니다.
 
 또한 Yaml 파일을 data.yaml의 내용과 같이 수정하여 학습시켰습니다.
 
-## Detect.py
+## 4. Detect.py
 
-### 파라미터 변경점
+### 4.1 파라미터 변경점
 ```python 3
 
 # list 객체를 파라미터로 받아줌
@@ -129,7 +129,7 @@ def parse_opt():
 ```
 
 
-### 코드 
+### 4.2 Run 코드 
 
 ```python3
 
