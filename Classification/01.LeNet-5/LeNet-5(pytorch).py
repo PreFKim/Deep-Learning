@@ -39,7 +39,7 @@ class LeNet_5(nn.Module):
         c3 = self.c3(s2)
         s4 = self.s4(c3)
         c5 = self.c5(s4)
-        c5 = c5.view(-1,c5.size(1))
+        c5 = c5.view(c5.size(0),-1)
         fc1 = self.fc1(c5)
         fc2 = self.fc2(fc1)
 
