@@ -1,3 +1,5 @@
+import keras
+
 def conv(input,chennel,kernel_sizes,strides=2,padding='valid',is_relu=True,is_bn=True):
   x = input
   x = keras.layers.Conv2D(chennel,kernel_sizes,strides,padding=padding)(x)

@@ -1,34 +1,37 @@
 import torch.nn as nn
-from torchsummary import summary 
+from torchsummary import summary
 
-
-class basic_block(nn.Module):
-    def __init__(self,i,o,s,stage):
-        super(basic_block,self).__init__()
-
+class bottleneck_block(nn.Module):
+    def __init__(self,i,o,s,e,stage):
+        super(bottleneck_block,self).__init__()
         
-        self.conv1 = nn.Conv2d(i,o,3,s,1)
-        self.bn = nn.BatchNorm2d(o)
+        self.conv1 = nn.Conv2d(i,o,1,s)
+        self.bn1 = nn.BatchNorm2d(o)
         self.relu = nn.ReLU()
-        self.conv2 = nn.Conv2d(o,o,3,1,'same')
-
-        if s == 2:
+        self.conv2 = nn.Conv2d(o,o,3,1,1)
+        self.bn2 = nn.BatchNorm2d(o)
+        self.conv3 = nn.Conv2d(o,o*e,1,1)
+        self.bn3 = nn.BatchNorm2d(o*e)
+        if s == 2 or i==o:
           self.identity = nn.Sequential(
-              nn.Conv2d(i,o,1,2),
-              nn.BatchNorm2d(o)
+              nn.Conv2d(i,o*e,1,s),
+              nn.BatchNorm2d(o*e)
           )
-        else:
+        else :
           self.identity = nn.Sequential()
+        
 
     def forward(self,x):
         identity = self.identity(x)
 
         out = self.conv1(x)
-        out = self.bn(out)
+        out = self.bn1(out)
         out = self.relu(out)
-        
         out = self.conv2(out)
-        out = self.bn(out)
+        out = self.bn2(out)
+        out = self.relu(out)
+        out = self.conv3(out)
+        out = self.bn3(out)
 
         out += identity
         out = self.relu(out)
@@ -36,15 +39,15 @@ class basic_block(nn.Module):
         return out
 
 
-class ResNet34(nn.Module):
-    def __init__(self,e=1,num_layers=[3,4,6,3]):
-        super(ResNet34,self).__init__()
+class ResNet50(nn.Module):
+    def __init__(self,e=4,num_layers=[3,4,6,3]):
+        super(ResNet50,self).__init__()
         def n_blocks(i,o,s,stage):
             layers = []
-            layers.append(basic_block(i,o,s,stage))
+            layers.append(bottleneck_block(i,o,s,e,stage))
 
             for _ in range(1,num_layers[stage]):
-                layers.append(basic_block(o*e,o,1,stage))
+                layers.append(bottleneck_block(o*e,o,1,e,stage))
 
             return nn.Sequential(*layers)
 
@@ -83,4 +86,4 @@ class ResNet34(nn.Module):
         
         return out
 
-summary(ResNet34(),(3,224,224))
+summary(ResNet50(),(3,224,224))

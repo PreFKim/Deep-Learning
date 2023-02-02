@@ -19,15 +19,12 @@ def resnet50():
   repeat = [3,4,6,3]
   for i in range(4):
     for j in range(repeat[i]):
+      shortcut = x
+      strides = 1
       if j==0:  
-        if i==0: 
-          strides = 1
-        else :
+        if i != 0:
           strides = 2
-        shortcut = conv(x,initial_features*2**(i+2),1,strides,'same',False)
-      else:
-        shortcut = x
-        strides = 1
+        shortcut = conv(shortcut,initial_features*2**(i+2),1,strides,'same',False)
         
       x = conv(x,initial_features*2**i,1,strides,'same')
       x = conv(x,initial_features*2**i,3,1,'same')
