@@ -14,12 +14,12 @@ def resnet50():
   x= inputs
   initial_features=64
   x = conv(x,initial_features,7,2,'same')
-  x = keras.layers.MaxPool2D(3,2)(x)
+  x = keras.layers.MaxPool2D(3,2,'same')(x)
 
-  repeat = [3,4,6,3]# resnet 101 152 이면  []
+  repeat = [3,4,6,3]
   for i in range(4):
     for j in range(repeat[i]):
-      if j==0:  #conv
+      if j==0:  
         if i==0: 
           strides = 1
         else :
@@ -35,9 +35,9 @@ def resnet50():
       x = keras.layers.add([x,shortcut])
       x = keras.activations.relu(x)
   
-  x = keras.layers.GlobalAveragePooling2D()(x)
+  x = keras.layers.GlobalAvgPool2D()(x)
   x = keras.layers.Dense(1000)(x)
-  x = keras.activations.relu(x)
+  x = keras.activations.softmax(x)
 
   return keras.Model(inputs=[inputs], outputs=[x], name=f'ResNet50')
 
