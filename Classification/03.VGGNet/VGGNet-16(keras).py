@@ -1,5 +1,3 @@
-import keras
-
 def conv(x,f,k,s,n):
   for i in range(n):
     x = keras.layers.Conv2D(f,k,s,padding='same')(x)
@@ -23,7 +21,8 @@ def vgg16():
   L5 = keras.layers.MaxPool2D(2,2)(L4)
   L5 = conv(L5,512,3,1,3)
 
-  F = keras.layers.GlobalMaxPool2D()(L5)
+  F = keras.layers.MaxPool2D(2,2)(L5)
+  F = keras.layers.Flatten()(F)
 
   FC1 = keras.layers.Dense(4096)(F)
   FC1 = keras.activations.relu(FC1)
