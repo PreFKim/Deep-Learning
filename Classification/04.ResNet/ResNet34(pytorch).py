@@ -32,11 +32,6 @@ class basic_block(nn.Module):
 
         return out
 
-#64 128
-
-#128 128
-
-
 
 class ResNet34(nn.Module):
     def __init__(self,num_layers=[3,4,6,3]):
@@ -70,23 +65,12 @@ class ResNet34(nn.Module):
             nn.Softmax()
         )
 
-
-
-        
-            
-
     def forward(self,x):
-        print('1')
         out = self.conv1(x)
-        print(out.shape)
         out = self.stage1(out)
-        print('1')
         out = self.stage2(out)
-        print('1')
         out = self.stage3(out)
-        print('1')
         out = self.stage4(out)
-        print('1')
 
         out = self.F(out)
 
@@ -94,7 +78,6 @@ class ResNet34(nn.Module):
 
         out = self.FC(out)
         
-
         return out
 
 summary(ResNet34(),(3,224,224))
