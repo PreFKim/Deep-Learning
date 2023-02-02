@@ -41,7 +41,7 @@ class transition_layer(nn.Module):
 
 
 class DenseNet(nn.Module):
-  def __init__(self,growth_rate=32,compression=0.5,num_conv=[6,12,32,32]):
+  def __init__(self,growth_rate=32,compression=0.5,num_layers=[6,12,32,32]):
     super(DenseNet,self).__init__()
 
     def dense_block(in_channels,n):
@@ -51,10 +51,10 @@ class DenseNet(nn.Module):
       return nn.Sequential(*layer)
     
     out_first = growth_rate*2
-    out_stage1 = out_first+growth_rate*num_conv[0]
-    out_stage2 = int(out_stage1*compression)+growth_rate*num_conv[1]
-    out_stage3 = int(out_stage2*compression)+growth_rate*num_conv[2]
-    out_stage4 = int(out_stage3*compression)+growth_rate*num_conv[3]
+    out_stage1 = out_first+growth_rate*num_layers[0]
+    out_stage2 = int(out_stage1*compression)+growth_rate*num_layers[1]
+    out_stage3 = int(out_stage2*compression)+growth_rate*num_layers[2]
+    out_stage4 = int(out_stage3*compression)+growth_rate*num_layers[3]
 
     self.first = nn.Sequential(
         nn.Conv2d(3,out_first,7,2,3),
@@ -63,16 +63,16 @@ class DenseNet(nn.Module):
         nn.MaxPool2d(3,2,1)
     )
 
-    self.stage1 = dense_block(out_first,num_conv[0])
+    self.stage1 = dense_block(out_first,num_layers[0])
     self.transition1 = transition_layer(out_stage1,compression)
 
-    self.stage2 = dense_block(int(out_stage1*compression),num_conv[1])
+    self.stage2 = dense_block(int(out_stage1*compression),num_layers[1])
     self.transition2 = transition_layer(out_stage2,compression)
 
-    self.stage3 = dense_block(int(out_stage2*compression),num_conv[2])
+    self.stage3 = dense_block(int(out_stage2*compression),num_layers[2])
     self.transition3 = transition_layer(out_stage3,compression)
 
-    self.stage4 = dense_block(int(out_stage3*compression),num_conv[3])
+    self.stage4 = dense_block(int(out_stage3*compression),num_layers[3])
     self.pool = nn.AdaptiveAvgPool2d(1)
     self.FC = nn.Sequential(
         nn.Linear(out_stage4,1000),
