@@ -56,7 +56,7 @@ class AlexNet(nn.Module):
         l5 = self.l5(l4)
 
         pool = self.pool(l5)
-        pool = pool.view(-1,pool.size(1))
+        pool = pool.view(pool.size(0),-1)
 
         fc1 = self.fc1(pool)
         fc2 = self.fc2(fc1)
