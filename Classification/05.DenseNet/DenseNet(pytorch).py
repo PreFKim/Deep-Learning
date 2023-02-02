@@ -7,9 +7,9 @@ class bottleneck_layer(nn.Module):
     super(bottleneck_layer,self).__init__()
 
     self.bn1 = nn.BatchNorm2d(i)
-    self.conv1 = nn.Conv2d(i,4*g,1,1,0)
+    self.conv1 = nn.Conv2d(i,4*g,1,1,'same')
     self.bn2 = nn.BatchNorm2d(4*g)
-    self.conv2 = nn.Conv2d(4*g,g,1,1,0)
+    self.conv2 = nn.Conv2d(4*g,g,3,1,'same')
     self.relu = nn.ReLU()
 
   def forward(self,x):
@@ -27,8 +27,8 @@ class transition_layer(nn.Module):
     super(transition_layer,self).__init__()
     self.bn = nn.BatchNorm2d(i)
     self.relu = nn.ReLU()
-    self.conv = nn.Conv2d(i,int(i*compression),1,1,1)
-    self.pool = nn.AvgPool2d(2,2,1)
+    self.conv = nn.Conv2d(i,int(i*compression),1,1,'same')
+    self.pool = nn.AvgPool2d(2,2)
   
   def forward(self,x):
     out = self.bn(x)
@@ -57,9 +57,12 @@ class DenseNet(nn.Module):
     out_stage4 = int(out_stage3*compression)+growth_rate*num_conv[3]
 
     self.first = nn.Sequential(
-        nn.Conv2d(3,out_first,7,2,1),
+        nn.Conv2d(3,out_first,7,2,3),
+        nn.BatchNorm2d(out_first),
+        nn.ReLU(),
         nn.MaxPool2d(3,2,1)
     )
+
     self.stage1 = dense_block(out_first,num_conv[0])
     self.transition1 = transition_layer(out_stage1,compression)
 
@@ -90,7 +93,7 @@ class DenseNet(nn.Module):
 
     out = self.stage4(out)
     out = self.pool(out)
-    out = out.view(out.size(0), out.size(1))
+    out = out.view(out.size(0), -1)
     out = self.FC(out)
     return out
 
