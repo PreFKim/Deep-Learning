@@ -4,9 +4,11 @@ def RESNET34():
   x = keras.layers.Input((224,224,3))
 
   l1 = keras.layers.Conv2D(64,7,2,'same')(x)
+  l1 = keras.layers.BatchNormalization()(l1)
+  l1 = keras.activations.relu(l1)
   
 
-  l2 = keras.layers.MaxPool2D(3,2)(l1)
+  l2 = keras.layers.MaxPool2D(3,2,'same')(l1)
 
   for i in range(3):
     shortcut = l2
