@@ -1,3 +1,5 @@
+import keras
+
 def conv(x,f,k,s,n):
   for i in range(n):
     x = keras.layers.Conv2D(f,k,s,padding='same')(x)
