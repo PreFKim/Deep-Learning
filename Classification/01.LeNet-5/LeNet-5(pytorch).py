@@ -6,18 +6,18 @@ class LeNet_5(nn.Module):
         super(LeNet_5,self).__init__()
 
         self.c1 = nn.Sequential(
-            nn.Conv2d(1,6,5,1,0),
+            nn.Conv2d(1,6,5,1),
             nn.ReLU()
         )
-        self.s2 = nn.AvgPool2d(2,2,0)
+        self.s2 = nn.AvgPool2d(2,2)
         self.c3 = nn.Sequential(
-            nn.Conv2d(6,16,5,1,0),
+            nn.Conv2d(6,16,5,1),
             nn.ReLU()
         )
-        self.s4 = nn.AvgPool2d(2,2,0)
+        self.s4 = nn.AvgPool2d(2,2)
 
         self.c5 = nn.Sequential(
-            nn.Conv2d(16,120,5,1,0),
+            nn.Conv2d(16,120,5,1),
             nn.ReLU()
         )
 
