@@ -9,7 +9,7 @@ def conv(input,chennel,kernel_sizes,strides=2,padding='valid',is_relu=True,is_bn
     x = keras.activations.relu(x)
   return x
 
-def resnet50(ratio=16):
+def se_resnet50(ratio=16):
   inputs = keras.Input(shape=[224,224,3])
   x= inputs
   initial_features=64
@@ -20,15 +20,12 @@ def resnet50(ratio=16):
   repeat = [3,4,6,3]
   for i in range(4):
     for j in range(repeat[i]):
-      if j==0:  #conv
-        if i==0: 
-          strides = 1
-        else :
+      shortcut = x
+      strides = 1
+      if j==0:  
+        if i != 0:
           strides = 2
-        shortcut = conv(x,initial_features*2**(i+2),1,strides,'same',False)
-      else:
-        shortcut = x
-        strides = 1
+        shortcut = conv(shortcut,initial_features*2**(i+2),1,strides,'same',False)
         
       x = conv(x,initial_features*2**i,1,strides,'same')
       x = conv(x,initial_features*2**i,3,1,'same')
@@ -42,7 +39,6 @@ def resnet50(ratio=16):
 
       scale = ex*x
 
-
       x = keras.layers.add([scale,shortcut])
       x = keras.activations.relu(x)
   
@@ -52,5 +48,5 @@ def resnet50(ratio=16):
 
   return keras.Model(inputs=[inputs], outputs=[x], name=f'SE-ResNet50')
 
-model = resnet50()
+model = se_resnet50()
 model.summary()
