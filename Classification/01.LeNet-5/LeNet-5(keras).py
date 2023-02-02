@@ -6,18 +6,14 @@ def lenet_5():
   C1 = keras.layers.Conv2D(6,5)(x)
   C1 = keras.activations.relu(C1)
 
-  S2 = keras.layers.AveragePooling2D(2,2,'same')(C1)
+  S2 = keras.layers.AveragePooling2D(2,2)(C1)
 
   C3 = keras.layers.Conv2D(16,5)(S2)
   C3 = keras.activations.relu(C3)
 
-  S4 = keras.layers.AveragePooling2D(2,2,'same')(C3)
+  S4 = keras.layers.AveragePooling2D(2,2)(C3)
   
   C5 = keras.layers.Conv2D(120,5)(S4)
-  
-  #F = keras.layers.Flatten()(S4)
-  #C5 = keras.layers.Dense(120)(F)
-
   C5 = keras.activations.relu(C5)
 
   F = keras.layers.Flatten()(C5)
