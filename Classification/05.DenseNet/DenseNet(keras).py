@@ -20,7 +20,7 @@ def DenseNet(growth_rate=32,compression=0.5):
 
       x = keras.layers.BatchNormalization()(x)
       x = keras.activations.relu(x)
-      x = keras.layers.Conv2D(growth_rate,1,1,'same')(x)
+      x = keras.layers.Conv2D(growth_rate,3,1,'same')(x)
 
       block.append(x)
       x = keras.layers.concatenate(block)
