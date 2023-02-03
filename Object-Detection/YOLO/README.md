@@ -61,11 +61,11 @@ YOLO의 구조는 간단하게 다음과 같이 보여줄 수 있다.
 
 그 방법은 다음과 같다.
 
-입력 이미지를 SxS의 격자로 나눈다.
+1. 입력 이미지를 SxS의 격자로 나눈다.
 
-객체의 중심이 격자 cell에 있다면 그 격자 cell은 객체를 탐지한다.
+2. 객체의 중심이 격자 cell에 있다면 그 격자 cell은 객체를 탐지한다.
 
-각각의 격자 cell은 Bounding box(b)와 해당박스의 confidence score를 예측한다.
+3. 각각의 격자 cell은 Bounding box(b)와 해당박스의 confidence score를 예측한다.
 
 이때 confidence Score는 해당박스가 어떠한 객체를 포함하고 있는지에 대한 confidence이고 모델이 예측한 박스가 얼마나 정확한지를 나타낸다.
 
