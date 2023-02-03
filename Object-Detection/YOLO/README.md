@@ -75,15 +75,16 @@ YOLO의 구조는 간단하게 다음과 같이 보여줄 수 있다.
 - w,h는 전체 이미지로부터의 상대적인 너비와 높이이다.
 
 ### Confidence Score
+
+$$
+Pr(Obj) \times IoU(pred,true)
+$$
+
 - confidence Score는 해당박스가 어떠한 객체를 포함하고 있는지에 대한 confidence이고 모델이 예측한 박스가 얼마나 정확한지를 나타낸다.
 
-$$
-Pr(Obj) \times IoU(pred,true) 이다.
-$$
+- Cell내에 어떠한 객체도 없다면 confidence score는 0이다.
 
-- Cell내에 어떠한 객체도 없다면 confidence는 0이다.
-
-- confidence는 어떠한 ground truth 박스와 해당 박스의 iou 값이다.
+- confidence Score는 어떠한 ground truth 박스와 해당 박스의 iou 값과 동일하다고 볼 수 있다.
 
 ### Class probablity
 - 각각의 격자 cell은 C개의 클래스에 대한 확률 집합으로 구성되어 있다.Pr(Classi|Obj)
@@ -91,16 +92,18 @@ $$
 - 한개의 격자 cell당 하나의 클래스만을 예측한다.
 
 
-### Finally
-최종 test에서는 class에 대한 조건부 확률과 각각의 Box의 confidence를 곱한다.(식(1))
+### Class specific confidence score
 
 ![2](./img/eqn1.PNG)
 
-식(1)은 특정 클래스에 대한 각 box에 대한 confidence score를 제곤한다.
+- 식(1)은 각 box에 대한 특정 클래스에 대해서 Confidence score를 제곤한다.
 
-이러한 score는 box에 나타난 클래스에 대한 확률과 박스가 얼마나 객체에 맞게 예측이 되었는지를 나타낸다.
+- 위 식은 box에 나타난 클래스에 대한 확률과 박스가 얼마나 객체에 맞게 예측이 되었는지를 나타낸다.
 
 ### Shape
+
+![3](./img/fig2.PNG)
+
 본 논문에서는 Pascal VOC(20개의 클래스를 가짐)를 평가하기 위해
 
 S=7 B=2 C=20을 사용해서 7x7x30 tensor를 가지게 되었다.
@@ -111,17 +114,12 @@ S=7 B=2 C=20을 사용해서 7x7x30 tensor를 가지게 되었다.
 
 이때 하나의 격자당 최대 두개의 box만을 예측할 수 있기 때문에 하나의 이미지 내에서 7x7x2(98)개의 bounding box만을 예측할 수 있는 것이다.
 
-![3](./img/fig2.PNG)
 
 ## 3. Network
 
 ## 3.1 Detail
 
-Conv Layer는 feature들을 추출하고 반면에 FC Layer는 확률과 좌표들을 예측합니다.
-
 본 논문의 구조는 GoogLeNet모델에 영향을 받았는데
-
-24개의 Conv layer를 지난후 2개의 FC Layer와 연결된다.
 
 이때 Inception module을 사용하는 것 대신에 1x1 reduction layer를 사용하며 3x3 conv layer를 사용한다.
 
@@ -129,16 +127,18 @@ Conv Layer는 feature들을 추출하고 반면에 FC Layer는 확률과 좌표�
 
 ![4](./img/fig3.PNG)
 
-YOLO는 Fast YOLO와 일반 YOLO가 있는데 앞에서 말한 모델은 일반 YOLO 모델이다.
+YOLO는 모델은 다음과 같이 두 모델로 나뉜다.
 
-이때 Fast YOLO모델은 24개의 레이어 대신 9개의 레이어를 사용한다.
+- Normal YOLO : 24개의 Conv layer를 지난후 2개의 FC Layer와 연결된다.
+
+- Fast YOLO : 9개의 Conv layer를 지난후 2개의 FC Layer와 연결된다.
 
 모델의 크기는 다르지만 , 두 모델의 파라미터 수는 같다.
 
 
 이때 입력 이미지는 fine grained된 특징을 더 잘 얻기 위해 224x224의 해상도를 448x448로 바꾸었다.
 
-추가적으로 최종 활성함수를 제외한 나머지 함수를 Leaky ReLU함수를 사용하였고 아래와 같다.
+추가적으로 최종 활성함수를 제외한 나머지 함수를 Leaky ReLU함수를 사용하였고 그 식은 아래와 같다. 
 
 ![5](./img/eqn2.PNG)
 
