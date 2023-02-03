@@ -258,9 +258,10 @@ $$
 
 ## 5.2 Non Maximal Suppresion
 
-![8](./img/NMS.png)
 
 Object Detection을 수행한 결과를 확인해보면 아래의 그림처럼 하나의 객체에 대해서 여러가지의 Bounding box가 나올 수 있다.
+
+![8](./img/NMS.png)
 
 이러한 여러 Bounding box 중에서 객체를 잘 보여주는 Box를 제외한 나머지 박스를 제외시켜주는 것이 NMS라고 할 수 있다.
 
@@ -270,7 +271,7 @@ NMS알고리즘은 다음과 같다.
 
 1. I에서 Bounding box별로 Confidence threshold 이하의 Box는 제거한다.
 
-2. 가장 높은 confidence score를 가진 Bounding box 순으로 내림차순 정렬한다.
+2. 가장 높은 confidence score를 가진 Bounding box 순으로 오름차순 정렬한다.
 
 3. 특정 이때 가장 높은 confidence score를 가진 bounding box를 I에서 O로 옮긴다.(I에 더이상 box가 없으면 종료)
 
