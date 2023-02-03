@@ -13,11 +13,11 @@ IoU와 Non Maximal Suppresion에 대해 잘 모르시는 분은 먼저 아래를
 ## 1. 기존의 모델들
 기존의 Object Detection 방식들은 classifier를 detection 모듈로 재구성 해서 객체를 탐지했다.
 
-대표적으로 DPM또는 R-CNN등이 있다.
+대표적으로 DPM또는 R-CNN등이 있는데 특징은 다음과 같다.
 
-DPM은 전체 이미지에 대해서 Sliding window 방식을 사용해서 classifier를 사용하도록 한다.
+- DPM은 전체 이미지에 대해서 Sliding window 방식을 사용해서 classifier를 사용하도록 한다.
 
-R-CNN은 먼저 Bounding box를 만들고 해당 bounding box에 대해서 classifier를 적용하는 방식이다.
+- R-CNN은 먼저 Bounding box를 만들고 해당 bounding box에 대해서 classifier를 적용하는 방식이다.
 
 이후에 후처리를 통해 중복된 bounding box와 같은 필요 없는 것을 제거하거나 다른 객체를 기반으로 box를 rescore하는 방식들이다.
 
@@ -65,26 +65,31 @@ YOLO의 구조는 간단하게 다음과 같이 보여줄 수 있다.
 
 2. 객체의 중심이 격자 cell에 있다면 그 격자 cell은 객체를 탐지한다.
 
-3. 각각의 격자 cell은 Bounding box(b)와 해당박스의 confidence score를 예측한다.
+3. 각각의 격자 cell은 B개의 Bounding box 정보와 C개의 class별 확률로 이루어져있다.
 
-이때 confidence Score는 해당박스가 어떠한 객체를 포함하고 있는지에 대한 confidence이고 모델이 예측한 박스가 얼마나 정확한지를 나타낸다.
-
-이를 공식화 하면 (객체에 대한 확률) * (실제와 예측의 box에 대한 IoU값)이다.
-
-어떠한 객체도 Cell내에 없다면 confidence는 0이다.
-
+### Bounding box
 각각의 bounding box는 (x,y,w,h,confidence)5개의 값을 가진다.
 
 x,y는 해당 격자 셀의 경계로부터의 상대적인 좌표이다.
 
 w,h는 전체 이미지로부터의 상대적인 너비와 높이이다.
 
+### Confidence Score
+confidence Score는 해당박스가 어떠한 객체를 포함하고 있는지에 대한 confidence이고 모델이 예측한 박스가 얼마나 정확한지를 나타낸다.
+
+이를 공식화 하면 (객체에 대한 확률) * (실제와 예측의 box에 대한 IoU값)이다.
+
+Cell내에 어떠한 객체도 없다면 confidence는 0이다.
+
 confidence는 어떠한 ground truth 박스와 해당 박스의 iou 값이다.
 
-각각의 격자 셀은 C개의 클래스에 대한 확률로 구성되어 있다.Pr(클래스i|객체)
+### Class probablity
+각각의 격자 cell은 C개의 클래스에 대한 확률 집합으로 구성되어 있다.Pr(클래스i|객체)
 
-각 격자는 box수(B)에 관계없이 하나의 Class확률 집합만은 예측한다.
+한개의 격자 cell당 하나의 클래스만을 예측한다.
 
+
+### Finally
 최종 test에서는 conditional class 확률과 각각의 box의 confidence를 곱한다.(식(1))
 
 ![2](./img/eqn1.PNG)
@@ -93,6 +98,7 @@ confidence는 어떠한 ground truth 박스와 해당 박스의 iou 값이다.
 
 이러한 score는 box에 나타난 클래스에 대한 확률과 박스가 얼마나 객체에 맞게 예측이 되었는지를 나타낸다.
 
+### Shape
 본 논문에서는 Pascal VOC(20개의 클래스를 가짐)를 평가하기 위해
 
 S=7 B=2 C=20을 사용해서 7x7x30 tensor를 가지게 되었다.
