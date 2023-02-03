@@ -183,9 +183,7 @@ Sum-squared erro는 또한 큰 box와 작은 box에서의 error 또한 동등하
 또한 만약 predictor가 ground truth box에 대한 "responsible" 이라면 loss function은 오직 bounding box 좌표에만 영향을 받는다.
 
 ## 3.5 Inference
-격자구조는 bounding box 예측에서 차원적인 측면으로 다양성을 강제하게 된다.
-
-네트워크는 각각의 객체마다 하나의 객체만을 예측하는 것이 다양하지만 격자구조로 인해 하나의 객체에 여러 bounding box가 존재함을 의미한다.
+네트워크는 각각의 객체마다 하나의 객체만을 예측하는 것이 다양하지만 격자구조로 인해 하나의 객체에 여러 bounding box가 존재한다.
 
 Fig2를 보더라도 하나의 객체 주변에 대해 많은 bounding box가 존재한다.
 
@@ -193,17 +191,16 @@ Fig2를 보더라도 하나의 객체 주변에 대해 많은 bounding box가 �
 
 ## 4. YOLO의 한계
 
-본 논문에서의 YOLO 모델은 오직 두개의 box만을 예측하고 나머지는 클래스의 확률에 대해서 예측하는 구조 때문에 bounding box를 예측하는데에 큰 제약이 생긴다.
 
-이런 제약은 한 이미지당 탐지할 수 있는 객체의 수를 제한한다.
+1. 하나의 이미지에 탐지될 객체의 수의 제한
+    앞에서 말했듯이 출력의 모양은 SxSx(B*5+c) 이라고 할때 한 셀당 bounding box에 대한 정보는 B개가 존재 하므로 한 이미지당 SxSxB개의 bounding box만 탐지할 수 있다.
 
-앞에서 말했듯이 출력의 모양은 SxSx(B*5+c) 이라고 할때 한 셀당 bounding box에 대한 정보는 B개가 존재 하므로 한 이미지당 SxSxB개의 bounding box만 탐지할 수 있다.
+2. coarse feature의 사용
+    본 논문의 YOLO 모델은 bounding box를 예측하기 위해 상대적으로 coarse feature를 사용하는데 이 이유는 입력이미지에 대해서 많은 downsampling layer를 가지기 때문이다.
 
-본 논문의 YOLO 모델은 bounding box를 예측하기 위해 상대적으로 coarse feature를 사용하는데 이 이유는 입력이미지에 대해서 많은 downsampling layer를 가지기 때문이다.
+3. 큰 box와 작은 box에 따라 다른 IoU값 변화에 따른 loss에서의 영향
 
-또한 Loss function을 통해 학습을 하기는 하지만 큰 box에 대해서 작은 error는 널널하게 적용되지만 작은 box에서의 작은 error는 IoU에서 큰 영향을 미친다.
-
-예를들어 4x4의 이미지 2x2 이미지 각각에서 의 한 픽셀 차이로 인한 IoU 값은 15/16이고 3/4로 작은 이미지에서의 IoU값 차이가 커지기 때문이다.
+    예를들어 4x4의 이미지 2x2 이미지 각각에서 의 한 픽셀 차이로 인한 IoU 값은 15/16이고 3/4로 작은 이미지에서의 IoU값 차이가 커지기 때문이다.
 
 
 ## 5. Others
