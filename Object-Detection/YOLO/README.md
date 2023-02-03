@@ -226,6 +226,7 @@ B = (Xb,Yb,Wb,Hb)
 이때 두 Box의 사이의 X축거리 Y축 거리를 dx dy라고 한다.
 
 합집합과 교집합 사이의 관계는 다음과 같다.
+
 $$
 Union(A,B) = A + B - Intersection(A,B)
 $$
