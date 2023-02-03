@@ -3,7 +3,7 @@
 
 IoU와 Non Maximal Suppresion에 대해 잘 모르시는 분은 먼저 아래를 눌러 IoU와 Non Maximal Suppresion에 대해서 보고 와주세요
 
-[IoU(Intersection over Union)](#51-iouintersection-of-union)
+[IoU(Intersection over Union)](#51-iouintersection-over-union)
 
 [Non Maximal Suppresion](#52-non-maximal-suppresion)
 
