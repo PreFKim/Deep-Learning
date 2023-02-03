@@ -68,29 +68,31 @@ YOLO의 구조는 간단하게 다음과 같이 보여줄 수 있다.
 3. 각각의 격자 cell은 B개의 Bounding box 정보와 C개의 class별 확률로 이루어져있다.
 
 ### Bounding box
-각각의 bounding box는 (x,y,w,h,confidence)5개의 값을 가진다.
+- 각각의 bounding box는 (x,y,w,h,confidence)5개의 값을 가진다.
 
-x,y는 해당 격자 셀의 경계로부터의 상대적인 좌표이다.
+- x,y는 해당 격자 셀의 경계로부터의 상대적인 좌표이다.
 
-w,h는 전체 이미지로부터의 상대적인 너비와 높이이다.
+- w,h는 전체 이미지로부터의 상대적인 너비와 높이이다.
 
 ### Confidence Score
-confidence Score는 해당박스가 어떠한 객체를 포함하고 있는지에 대한 confidence이고 모델이 예측한 박스가 얼마나 정확한지를 나타낸다.
+- confidence Score는 해당박스가 어떠한 객체를 포함하고 있는지에 대한 confidence이고 모델이 예측한 박스가 얼마나 정확한지를 나타낸다.
 
-이를 공식화 하면 (객체에 대한 확률) * (실제와 예측의 box에 대한 IoU값)이다.
+$$
+Pr(Obj) \times IoU(pred,true) 이다.
+$$
 
-Cell내에 어떠한 객체도 없다면 confidence는 0이다.
+- Cell내에 어떠한 객체도 없다면 confidence는 0이다.
 
-confidence는 어떠한 ground truth 박스와 해당 박스의 iou 값이다.
+- confidence는 어떠한 ground truth 박스와 해당 박스의 iou 값이다.
 
 ### Class probablity
-각각의 격자 cell은 C개의 클래스에 대한 확률 집합으로 구성되어 있다.Pr(클래스i|객체)
+- 각각의 격자 cell은 C개의 클래스에 대한 확률 집합으로 구성되어 있다.Pr(Classi|Obj)
 
-한개의 격자 cell당 하나의 클래스만을 예측한다.
+- 한개의 격자 cell당 하나의 클래스만을 예측한다.
 
 
 ### Finally
-최종 test에서는 conditional class 확률과 각각의 box의 confidence를 곱한다.(식(1))
+최종 test에서는 class에 대한 조건부 확률과 각각의 Box의 confidence를 곱한다.(식(1))
 
 ![2](./img/eqn1.PNG)
 
