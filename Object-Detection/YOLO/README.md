@@ -176,11 +176,11 @@ Sum-squared erro는 또한 큰 box와 작은 box에서의 error 또한 동등하
 
 ![6](./img/eqn3.PNG)
 
-이때 식에서 1(obj,i)는 cell i에서 객체가 나타남을 의미하고 1(obj,(i,j))는 i번째 cell에서 j번째 bounding box가 해당 예측에 대한 "responsible"이라는 것이다.
+이때 식에서 1(obj,i)는 cell i에서 객체가 있음을 의미하고 1(obj,(i,j))는 i번째 cell에서 j번째 bounding box가 해당 예측에 대한 "responsible"이다.
 
-만약 격자 cell에서 객체가 보여지면 loss function은 classification error에만 영향을 받는다(따라서 앞에서 말한 조건부 확률과 같다)
+이는 즉 객체가 있다고 판별하는 경우의 loss를 구할때는 responsible 정보만을 사용하면 되지만
 
-또한 만약 predictor가 ground truth box에 대한 "responsible" 이라면 loss function은 오직 bounding box 좌표에만 영향을 받는다.
+객체가 없다고 판별하는 경우에는 모든 bounding box의 정보를 사용해서 loss를 구해야한다.
 
 위 식에서 각각의 줄은 다음을 의미한다
 1. Bounding box의 중심좌표 차이에 대한 Loss (localization)
