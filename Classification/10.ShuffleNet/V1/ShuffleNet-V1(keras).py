@@ -9,6 +9,7 @@ def gconv(input,group,channels):
   
   for i in range(group):
     group_list.append(keras.layers.Conv2D(channels//group,1,1,'same')(input[:,:,:,start_idx:start_idx+ranges]))
+    start_idx += ranges
 
   if group == 1:
     x = group_list[0]
