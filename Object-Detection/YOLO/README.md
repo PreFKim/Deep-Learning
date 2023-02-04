@@ -62,7 +62,7 @@ YOLO의 구조는 간단하게 다음과 같이 보여줄 수 있다.
 
 ---
 
-### Object detection Method
+### 2.1 Object detection Method
 
 각각의 Bounding box를 예측하기 위해 전체이미지로부터 feature들을 얻어내 사용했고 이 때문에 Bounding box에 대해서 Class를 예측할 수 있게 되면서 한번에 Class와 Bounding box에 대해서 예측할 수 있게 되었다.
 
@@ -76,7 +76,7 @@ YOLO의 구조는 간단하게 다음과 같이 보여줄 수 있다.
 
 ---
 
-### Bounding box
+### 2.2 Bounding box
 - 각각의 bounding box는 (x,y,w,h,confidence) 5개의 값을 가진다.
 
 - x,y는 해당 "격자 cell의 경계"로부터의 상대적인 좌표이다.
@@ -85,7 +85,7 @@ YOLO의 구조는 간단하게 다음과 같이 보여줄 수 있다.
 
 ---
 
-### Confidence Score
+### 2.3 Confidence Score
 
 $$
 Pr(Obj) \times IoU(pred,true)
@@ -101,7 +101,7 @@ $$
 
 ---
 
-### Class probablity
+### 2.4 Class probablity
 
 $$
 Pr(Classi|Obj)
@@ -113,7 +113,7 @@ $$
 
 ---
 
-### Class specific confidence score
+### 2.5 Class specific confidence score
 
 ![2](./img/eqn1.PNG)
 
@@ -123,7 +123,7 @@ $$
 
 ---
 
-### Shape
+### 2.6 Shape
 
 ![3](./img/fig2.PNG)
 
