@@ -227,7 +227,15 @@ Box A와 B의 중심좌표와 너비 높이를 아래와 같이 정의하면 아
 A = (Xa,Ya,Wa,Ha)
 B = (Xb,Yb,Wb,Hb)
 
-이때 두 Box의 사이의 X축거리 Y축 거리를 dx dy라고 한다.
+이 정보를 통해 박스위 왼쪽위 좌표(x1,y1) 오른쪽 아래 좌표(x2,y2) 로 변환하면 다음과 같다.(x1,y1,x2,y2)
+
+A = (Xa-Wa/2,Ya-Ha/2,Xa+Wa/2,Ya+Ha/2) = (X1a,Y1a,X2a,Y2a)
+B = (Xb-Wb/2,Yb-Hb/2,Xb+Wb/2,Yb+Hb/2) = (X1b,Y1b,X2b,Y2b)
+
+이때 겹치는 부분의 왼쪽 위 좌표 오른쪽 아래 좌표는 다음과 같다.
+
+I = (max(x1a,x1b),max(y1a,y1b),min(x2a,x2b),min(y2a,y2b)) = (X1i,Y1i,X2i,Y2i)
+
 
 합집합과 교집합 사이의 관계는 다음과 같다.
 
@@ -238,17 +246,17 @@ $$
 만약 두 박스가 겹친다고 할 때 Intersection(A,B)는 다음과 같다.
 
 $$
-Intersection(A,B) = dx \times dy
+Intersection(A,B) = (X2i-X1i) \times (Y2i-Y1i)
 $$
 
 이때 A와 B는 각각 다음과 같으므로
 
 $$
-A = Wa \times Ha 
+A = (X2a-X1a) \times (Y2a-Y1a)
 $$
 
 $$
-B = Wb \times Hb 
+B = (X2b-X1b) \times (Y2b-Y1b)
 $$
 
 
@@ -256,7 +264,7 @@ $$
 이를 이용해 IoU 를 수식으로 표현하면 다음과 같다.
 
 $$
-IoU = \frac{dx \times dy} {Wa \times Ha + Wb \times Hb - dx \times dy}
+IoU = \frac{(X2i-X1i) \times (Y2i-Y1i)} {(X2a-X1a) \times (Y2a-Y1a) + (X2b-X1b) \times (Y2b-Y1b) - (X2i-X1i) \times (Y2i-Y1i)}
 $$
 
 
