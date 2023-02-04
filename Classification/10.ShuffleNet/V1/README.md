@@ -3,9 +3,8 @@
 
 ---
 ## 1. ShuffleNet 특징
-ShuffleNet은 매우 computation efficient한 모델이다.
 
-모바일 디바이스를 위해 디자인 되었으며 매우 작은 computing power에서도 잘 작동한다(10~150 MFLOPs)
+ShuffleNet은 모바일 디바이스를 위해 디자인 되었으며 매우 작은 computing power에서도 잘 작동한다(10~150 MFLOPs)
 
 ShuffletNet의 주요한 특징은 두개의 새로운 연산으로 구성되는데 pointwise group convolution과 channel shuffle로 이루어져있다.
 
@@ -72,7 +71,9 @@ channel shuffle 연산은 다중 group conv 레어와 함께 더 강력한 구�
 
 처음에 Fig2(a)처럼 bottleneck unit을 만들었고 이는 residual block이다.
 
-이러한 residual block에서 3x3layer를 3x3 depthwise conv로 대체하고 첫번째 1x1 layer를 pointwise group conv로 대체하고 이후에 channel shuffle 연산을 하도록 하였다.[fig2(b)]
+이러한 residual block에서 3x3 layer를 3x3 depthwise conv로 대체하고 첫번째 1x1 layer를 pointwise group conv로 대체하고 이후에 channel shuffle 연산을 하도록 하였다.[fig2(b)]
+
+이때 첫번째 1x1 gconv는 bottleneck 역할을하며 채널 수를 1/4로 줄인다.
 
 second pointwise group conv의 목적은 줄어들었던 channel dimension을 shortcut path와 match 하기 위해 복구하는 것이다.
 
