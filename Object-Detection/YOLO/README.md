@@ -1,4 +1,7 @@
 # [YOLO V1](https://arxiv.org/abs/1506.02640)
+
+---
+
 본 페이지에서는 YOLO의 등장배경과 특징에 대해서 말하고자 합니다.
 
 IoU와 Non Maximal Suppresion에 대해 잘 모르시는 분은 먼저 아래를 눌러 IoU와 Non Maximal Suppresion에 대해서 보고 와주세요
