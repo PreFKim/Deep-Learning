@@ -1,4 +1,4 @@
-# [YOLO](https://arxiv.org/abs/1506.02640)
+# [YOLO V1](https://arxiv.org/abs/1506.02640)
 본 페이지에서는 YOLO의 등장배경과 특징에 대해서 말하고자 합니다.
 
 IoU와 Non Maximal Suppresion에 대해 잘 모르시는 분은 먼저 아래를 눌러 IoU와 Non Maximal Suppresion에 대해서 보고 와주세요
@@ -7,6 +7,11 @@ IoU와 Non Maximal Suppresion에 대해 잘 모르시는 분은 먼저 아래를
 
 2. [Non Maximal Suppresion](#52-non-maximal-suppresion)
 
+다른 논문들과는 다르게 본 논문은 모델의 구조를 중점적으로 읽지 말고 다음을 신경쓰면서 봐주시면 좋겠습니다.
+
+- 왜 모델의 출력이 다음과 같이 나오는가?
+
+- 논문에 나온 Loss함수는 각각 어떤 의미를 가지고 어떻게 구현할 것인가?
 
 ---
 
@@ -24,6 +29,8 @@ IoU와 Non Maximal Suppresion에 대해 잘 모르시는 분은 먼저 아래를
 이러한 구조 때문에 처리하는 속도가 느려지게 되고 각각에 요소에 대해서 학습하는 것이 어려워진다.
 
 즉, Object detection을 두 단계로 처리해서 이를 Two-stage detection이라고 한다.
+
+---
 
 ## 2. YOLO
 
@@ -53,7 +60,9 @@ YOLO의 구조는 간단하게 다음과 같이 보여줄 수 있다.
 
     높은 generalize 때문에 새로운 상황이나 예측하지 못한 입력에 대해서도 높은 성능을 보인다.
 
-## 2.1 Object detection Method
+---
+
+### Object detection Method
 
 각각의 Bounding box를 예측하기 위해 전체이미지로부터 feature들을 얻어내 사용했고 이 때문에 Bounding box에 대해서 Class를 예측할 수 있게 되면서 한번에 Class와 Bounding box에 대해서 예측할 수 있게 되었다.
 
@@ -65,12 +74,16 @@ YOLO의 구조는 간단하게 다음과 같이 보여줄 수 있다.
 
 3. 각각의 격자 Cell은 B개의 Bounding box 정보와 C개의 class별 확률로 이루어져있다.
 
+---
+
 ### Bounding box
 - 각각의 bounding box는 (x,y,w,h,confidence) 5개의 값을 가진다.
 
 - x,y는 해당 "격자 cell의 경계"로부터의 상대적인 좌표이다.
 
 - w,h는 "전체 이미지"로부터의 상대적인 너비와 높이이다.
+
+---
 
 ### Confidence Score
 
@@ -85,6 +98,9 @@ $$
 - Confidence Score는 해당 cell에 대한 Ground truth box와 Cell 내의 어떤 Bounding box의 iou 값과 동일하다고 볼 수 있다.
 
 - IoU에 대한 자세한 설명은 [여기](#51-iouintersection-over-union) 있습니다.
+
+---
+
 ### Class probablity
 
 $$
@@ -95,6 +111,7 @@ $$
 
 - 한개의 격자 cell당 하나의 클래스만을 예측한다.
 
+---
 
 ### Class specific confidence score
 
@@ -103,6 +120,8 @@ $$
 - 식(1)은 각 Bounding box에 대한 특정 클래스에 대해서 Confidence score를 제공한다.
 
 - 위 식은 box에 나타난 클래스에 대한 확률과 박스가 얼마나 객체에 맞게 예측이 되었는지를 나타낸다.
+
+---
 
 ### Shape
 
@@ -118,6 +137,7 @@ S=7 B=2 C=20을 사용해서 7x7x30 tensor를 가지게 되었다.
 
 이때 하나의 격자당 최대 두개의 box만을 예측할 수 있기 때문에 하나의 이미지 내에서 7x7x2(98)개의 bounding box만을 예측할 수 있는 것이다.
 
+---
 
 ## 3. Network
 
@@ -146,6 +166,8 @@ YOLO는 모델은 다음과 같이 두 모델로 나뉜다.
 
 ![5](./img/eqn2.PNG)
 
+---
+
 ## 3.2 Regression
 
 YOLO 모델은 기존 모델들과 다르게 회귀문제로 Detection을 해내는데 이를 위해서 sum squared error를 optimize하는 방식을 사용한다.
@@ -168,12 +190,16 @@ YOLO 모델은 기존 모델들과 다르게 회귀문제로 Detection을 해내
 
 이를 어느정도 해결하기 위해서 bounding box의 너비와 폭에 square root를 적용한다.
 
+---
+
 ## 3.3 Responsible
 각 격자 cell에는 여러가지 bounding box가 있다.(본 논문에서는 2개의 bounding box가 존재함)
 
 이때 각 객체에 대해 하나의 bounding box predictor만을 원하는데(즉 여러개의 박스 예측 중에서 하나만 나오게 하고 싶어하는 것을 의미함)
 
 이때 Responsible 이라는 것은 하나의 cell에 대한 bounding box들과 ground truth와의 IoU가 가장 높은 예측을 말한다.
+
+---
 
 ## 3.4 Loss Function
 
@@ -186,20 +212,28 @@ YOLO 모델은 기존 모델들과 다르게 회귀문제로 Detection을 해내
 객체가 없다고 판별하는 경우에는 모든 bounding box의 정보를 사용해서 loss를 구해야한다.
 
 위 식에서 각각의 줄은 다음을 의미한다
-1. Bounding box의 중심좌표 차이에 대한 Loss (localization)[Reponsible]
-2. Bounding box의 크기 높이 차이에 대한 Loss (localization)[Reponsible]
-3. 객체가 있는 경우의 Confidence Score 차이에 대한 Loss(confidence)[Reponsible]
-4. 객체가 없는 경우의 Confidence Score 차이에 대한 Loss(confidence)[All]
+1. Bounding box의 중심좌표 차이에 대한 Loss (localization) [Reponsible]
+
+2. Bounding box의 크기 높이 차이에 대한 Loss (localization) [Reponsible]
+
+3. 객체가 있는 경우의 Confidence Score 차이에 대한 Loss(confidence) [Reponsible]
+
+4. 객체가 없는 경우의 Confidence Score 차이에 대한 Loss(confidence) [All]
+
 5. 각 클래스 값 차이에 대한 Loss(classification)
+
+---
 
 ## 3.5 Non Maximal Suppression
 Object detection의 결과를 확인할 떄 하나의 객체에 대해서 하나의 Bounding box만을 예측해야하지만 실제 결과에서는 하나의 객체에 여러개의 Bounding box가 존재할 가능성이 높다.
 
-[Fig2](3)를 보더라도 하나의 객체 주변에 대해 많은 bounding box가 존재한다.
+Fig2를 보더라도 하나의 객체 주변에 대해 많은 bounding box가 존재한다.
 
 이는 Non Maximal Suppresion을 통해 해결할 수 있다.
 
 Non Maximal Suppression에 대한 설명은 [아래](#52-non-maximal-suppresion)에 있습니다.
+
+---
 
 ## 4. YOLO의 한계
 
@@ -214,6 +248,7 @@ Non Maximal Suppression에 대한 설명은 [아래](#52-non-maximal-suppresion)
 
     예를들어 4x4의 이미지 2x2 이미지 각각에서 의 한 픽셀 차이로 인한 IoU 값은 15/16이고 3/4로 작은 이미지에서의 IoU값 차이가 커지기 때문이다.
 
+---
 
 ## 5. Others
 
@@ -272,7 +307,7 @@ $$
 IoU = \frac{(X2i-X1i) \times (Y2i-Y1i)} {(X2a-X1a) \times (Y2a-Y1a) + (X2b-X1b) \times (Y2b-Y1b) - (X2i-X1i) \times (Y2i-Y1i)}
 $$
 
-
+---
 
 ## 5.2 Non Maximal Suppresion
 
@@ -294,3 +329,5 @@ NMS알고리즘은 다음과 같다.
 3. 특정 이때 가장 높은 confidence score를 가진 bounding box를 I에서 O로 옮긴다.(I에 더이상 box가 없으면 종료)
 
 4. 3에서 선택한 box와 겹치는 box를 모두 조사하여 두 box에 대한 IoU threshold 이상인 boundong box를 I 에서 모두 제거한 후 3.으로 간다.
+
+---
