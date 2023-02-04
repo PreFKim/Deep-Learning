@@ -17,7 +17,7 @@ def fire_module(x,s1x1,e1x1,e3x3):
 
   return result
 
-def Squeezenet():
+def SqueezeNet():
   input= keras.layers.Input((224,224,3))
 
   conv1 = keras.layers.Conv2D(96,7,2,'same')(input)
@@ -51,5 +51,5 @@ def Squeezenet():
 
   return keras.Model(inputs=input,outputs=output, name='SqueezeNet')
 
-model = Squeezenet()
+model = SqueezeNet()
 model.summary()
