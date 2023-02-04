@@ -3,9 +3,9 @@
 
 IoU와 Non Maximal Suppresion에 대해 잘 모르시는 분은 먼저 아래를 눌러 IoU와 Non Maximal Suppresion에 대해서 보고 와주세요
 
-[IoU(Intersection over Union)](#51-iouintersection-over-union)
+1. [IoU(Intersection over Union)](#51-iouintersection-over-union)
 
-[Non Maximal Suppresion](#52-non-maximal-suppresion)
+2. [Non Maximal Suppresion](#52-non-maximal-suppresion)
 
 
 ---
@@ -181,6 +181,13 @@ Sum-squared erro는 또한 큰 box와 작은 box에서의 error 또한 동등하
 만약 격자 cell에서 객체가 보여지면 loss function은 classification error에만 영향을 받는다(따라서 앞에서 말한 조건부 확률과 같다)
 
 또한 만약 predictor가 ground truth box에 대한 "responsible" 이라면 loss function은 오직 bounding box 좌표에만 영향을 받는다.
+
+위 식에서 각각의 줄은 다음을 의미한다
+1. Bounding box의 중심좌표 차이에 대한 Loss (localization)
+2. Bounding box의 크기 높이 차이에 대한 Loss (localization)
+3. 객체가 있는 경우의 Confidence Score 차이에 대한 Loss(confidence)
+4. 객체가 없는 경우의 Confidence Score 차이에 대한 Loss(confidence)
+5. 각 클래스 값 차이에 대한 Loss(classification)
 
 ## 3.5 Inference
 네트워크는 각각의 객체마다 하나의 객체만을 예측하는 것이 다양하지만 격자구조로 인해 하나의 객체에 여러 bounding box가 존재한다.
