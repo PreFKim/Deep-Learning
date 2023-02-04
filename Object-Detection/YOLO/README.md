@@ -23,13 +23,13 @@ IoU와 Non Maximal Suppresion에 대해 잘 모르시는 분은 먼저 아래를
 
 이러한 구조 때문에 처리하는 속도가 느려지게 되고 각각에 요소에 대해서 학습하는 것이 어려워진다.
 
-즉, object detection을 두 단계로 처리해서 이를 Two-stage detection이라고 한다.
+즉, Object detection을 두 단계로 처리해서 이를 Two-stage detection이라고 한다.
 
 ## 2. YOLO
 
 YOLO는 이와 다르게 Bounding box와 class에 대한 확률을 회귀 문제로 본다.
 
-이 방법은 bounding box와 class에 대한 확률을 한번에 예측할 수 있게 한다.
+이 방법은 Bounding box와 class에 대한 확률을 한번에 예측할 수 있게 한다.
 
 이러한 구조 때문에 초당 45장 최대 155장의 이미지를 처리해 realtime detection이 가능하게 한다.
 
@@ -55,24 +55,22 @@ YOLO의 구조는 간단하게 다음과 같이 보여줄 수 있다.
 
 ## 2.1 Object detection Method
 
-기존의 방법인 Two-stage 방식을 한번에 할 수 있게 되었다.
-
-각각의 bounding box를 예측하기 위해 전체이미지로부터 feature들을 얻어내 사용했고 이 때문에 bounding box에 대해서 class를 예측할 수 있게 되었다.
+각각의 Bounding box를 예측하기 위해 전체이미지로부터 feature들을 얻어내 사용했고 이 때문에 Bounding box에 대해서 Class를 예측할 수 있게 되면서 한번에 Class와 Bounding box에 대해서 예측할 수 있게 되었다.
 
 그 방법은 다음과 같다.
 
-1. 입력 이미지를 SxS의 격자로 나눈다.
+1. 입력 이미지를 모델을 통해서 SxS의 격자 cell들로 변환한다.
 
-2. 객체의 중심이 격자 cell에 있다면 그 격자 cell은 객체를 탐지한다.
+2. 객체의 중심좌표가 격자 cell 내부에 있다면 그 격자 cell은 객체를 탐지한 것이다.
 
-3. 각각의 격자 cell은 B개의 Bounding box 정보와 C개의 class별 확률로 이루어져있다.
+3. 각각의 격자 Cell은 B개의 Bounding box 정보와 C개의 class별 확률로 이루어져있다.
 
 ### Bounding box
-- 각각의 bounding box는 (x,y,w,h,confidence)5개의 값을 가진다.
+- 각각의 bounding box는 (x,y,w,h,confidence) 5개의 값을 가진다.
 
-- x,y는 해당 격자 셀의 경계로부터의 상대적인 좌표이다.
+- x,y는 해당 "격자 cell의 경계"로부터의 상대적인 좌표이다.
 
-- w,h는 전체 이미지로부터의 상대적인 너비와 높이이다.
+- w,h는 "전체 이미지"로부터의 상대적인 너비와 높이이다.
 
 ### Confidence Score
 
@@ -80,14 +78,20 @@ $$
 Pr(Obj) \times IoU(pred,true)
 $$
 
-- confidence Score는 해당박스가 어떠한 객체를 포함하고 있는지에 대한 confidence이고 모델이 예측한 박스가 얼마나 정확한지를 나타낸다.
+- Confidence Score는 해당박스가 어떠한 객체를 포함하고 있는지에 대한 Confidence이고 모델이 예측한 박스가 얼마나 정확한지를 나타낸다.
 
-- Cell내에 어떠한 객체도 없다면 confidence score는 0이다.
+- Cell내에 어떠한 객체도 없다면 Confidence score는 0이다.
 
-- confidence Score는 어떠한 ground truth 박스와 해당 박스의 iou 값과 동일하다고 볼 수 있다.
+- Confidence Score는 해당 cell에 대한 Ground truth box와 Cell 내의 어떤 Bounding box의 iou 값과 동일하다고 볼 수 있다.
 
+- IoU에 대한 자세한 설명은 [여기](#51-iouintersection-over-union) 있습니다.
 ### Class probablity
-- 각각의 격자 cell은 C개의 클래스에 대한 확률 집합으로 구성되어 있다.Pr(Classi|Obj)
+
+$$
+Pr(Classi|Obj)
+$$
+
+- 각각의 격자 cell은 C개의 클래스에 대한 확률 집합으로 구성되어 있다.
 
 - 한개의 격자 cell당 하나의 클래스만을 예측한다.
 
@@ -96,7 +100,7 @@ $$
 
 ![2](./img/eqn1.PNG)
 
-- 식(1)은 각 box에 대한 특정 클래스에 대해서 Confidence score를 제곤한다.
+- 식(1)은 각 Bounding box에 대한 특정 클래스에 대해서 Confidence score를 제공한다.
 
 - 위 식은 box에 나타난 클래스에 대한 확률과 박스가 얼마나 객체에 맞게 예측이 되었는지를 나타낸다.
 
@@ -121,7 +125,7 @@ S=7 B=2 C=20을 사용해서 7x7x30 tensor를 가지게 되었다.
 
 본 논문의 구조는 GoogLeNet모델에 영향을 받았는데
 
-이때 Inception module을 사용하는 것 대신에 1x1 reduction layer를 사용하며 3x3 conv layer를 사용한다.
+이때 Inception module을 사용하는 것 대신에 1x1 reduction layer -> 3x3 conv layer를 사용한다.
 
 그 구조는 아래 그림과 같다.
 
@@ -138,7 +142,7 @@ YOLO는 모델은 다음과 같이 두 모델로 나뉜다.
 
 이때 입력 이미지는 fine grained된 특징을 더 잘 얻기 위해 224x224의 해상도를 448x448로 바꾸었다.
 
-추가적으로 최종 활성함수를 제외한 나머지 함수를 Leaky ReLU함수를 사용하였고 그 식은 아래와 같다. 
+추가적으로 최종 활성함수를 제외한 나머지 함수를 Leaky ReLU함수를 사용하였고 Leaky ReLU 식은 아래와 같다. 
 
 ![5](./img/eqn2.PNG)
 
@@ -150,51 +154,52 @@ YOLO 모델은 기존 모델들과 다르게 회귀문제로 Detection을 해내
 
 그 이유는 다음과 같다.
 
-1. Localization error(box에 대한 정보)를 Classification error(확률 분포)와 동일하게 가중치를 두는데 이는 이상적이지 않다(본 논문에서 30개의 채널에 대해서 모두 같은 수치라고 생각하기 때문이다.)
+1. Localization error(box에 대한 정보)를 Classification error(확률 분포)와 동일하게 가중치를 두는데 이는 이상적이지 않다(본 논문에서는 한 격자당 30개의 채널이 있는데 그냥 MSE를 적용하는 경우 20개의 class,2개의 bounding box 정보 라고 보는 게 아니라 30개의 class에 대한 것이라고 판단할 수 있음)
 
-2. 모든 이미지에서 많은 격자 cell들은 어떤 객체도 포함하지 않는 경우가 생기는데 이러한 이유 때문에 confidence score가 0으로 향하게 학습이 된다.(이러한 점이 각각의 객체를 포함한 cell들의 gradient를 압도하는 경우가 생김[없다고 판단하게 만든다는 의미])
+2. 이미지에서 격자 cell들은 어떤 객체도 포함하지 않는 경우가 많은데 이러한 이유 때문에 confidence score가 0으로 향하게 학습이 된다.(이러한 점이 각각의 객체를 포함한 cell들의 gradient를 압도하는 경우가 생김[없다고 판단하게 만든다는 의미])
 
-이를 해결하기 위해서 bounding box 좌표 예측의 loss를 증가시키고 객체를 포함하지 않은 박스들에 대한 confidence를 낮추기 위해 다음과 같은 파라미터를 정의했다.
+이를 해결하기 위해서 bounding box Localization loss를 증가시키고 객체를 포함하지 않은 박스들에 대한 confidence를 낮추기 위해 다음과 같은 파라미터를 정의했다.
 
 λcoord = 5로 두고 λnoobj = 0.5로 설정했다.
 
-Sum-squared erro는 또한 큰 box와 작은 box에서의 error 또한 동등하게 가중치를 두는데 
+또한 Sum-squared error는 큰 box와 작은 box에서의 error 또한 동등하게 가중치를 두는데
 
 이때 YOLO의 error metric은 큰 box에서의 작은 편차가 작은 box에서보다 덜 중요하다는 것을 반영을 해야한다.
 
 이를 어느정도 해결하기 위해서 bounding box의 너비와 폭에 square root를 적용한다.
 
 ## 3.3 Responsible
-각 격자 cell에는 여러가지 bounding box가 있다.
+각 격자 cell에는 여러가지 bounding box가 있다.(본 논문에서는 2개의 bounding box가 존재함)
 
-이때 각 객체에 대해 하나의 bounding box predictor만을 원하는데
+이때 각 객체에 대해 하나의 bounding box predictor만을 원하는데(즉 여러개의 박스 예측 중에서 하나만 나오게 하고 싶어하는 것을 의미함)
 
-이때 Responsible 이라는 것은 여러 cell들에 존재하는 bounding box들 중에서 ground truth와의 IoU가 가장 높은 예측을 말한다.
-
+이때 Responsible 이라는 것은 하나의 cell에 대한 bounding box들과 ground truth와의 IoU가 가장 높은 예측을 말한다.
 
 ## 3.4 Loss Function
 
 ![6](./img/eqn3.PNG)
 
-이때 식에서 1(obj,i)는 cell i에서 객체가 있음을 의미하고 1(obj,(i,j))는 i번째 cell에서 j번째 bounding box가 해당 예측에 대한 "responsible"이다.
+이때 식에서 1(obj,i)는 cell i에서 객체가 있음을 의미하고 1(obj,(i,j))는 i번째 cell에서 j번째 bounding box가 해당 예측에 대한 "responsible"을 의미한다..
 
-이는 즉 객체가 있다고 판별하는 경우의 loss를 구할때는 responsible 정보만을 사용하면 되지만
+객체가 있다고 판별하는 경우에 대해서 loss를 구할때는 responsible 정보만을 사용하면 되지만
 
 객체가 없다고 판별하는 경우에는 모든 bounding box의 정보를 사용해서 loss를 구해야한다.
 
 위 식에서 각각의 줄은 다음을 의미한다
-1. Bounding box의 중심좌표 차이에 대한 Loss (localization)
-2. Bounding box의 크기 높이 차이에 대한 Loss (localization)
-3. 객체가 있는 경우의 Confidence Score 차이에 대한 Loss(confidence)
-4. 객체가 없는 경우의 Confidence Score 차이에 대한 Loss(confidence)
+1. Bounding box의 중심좌표 차이에 대한 Loss (localization)[Reponsible]
+2. Bounding box의 크기 높이 차이에 대한 Loss (localization)[Reponsible]
+3. 객체가 있는 경우의 Confidence Score 차이에 대한 Loss(confidence)[Reponsible]
+4. 객체가 없는 경우의 Confidence Score 차이에 대한 Loss(confidence)[All]
 5. 각 클래스 값 차이에 대한 Loss(classification)
 
-## 3.5 Inference
-네트워크는 각각의 객체마다 하나의 객체만을 예측하는 것이 다양하지만 격자구조로 인해 하나의 객체에 여러 bounding box가 존재한다.
+## 3.5 Non Maximal Suppression
+Object detection의 결과를 확인할 떄 하나의 객체에 대해서 하나의 Bounding box만을 예측해야하지만 실제 결과에서는 하나의 객체에 여러개의 Bounding box가 존재할 가능성이 높다.
 
-Fig2를 보더라도 하나의 객체 주변에 대해 많은 bounding box가 존재한다.
+[Fig2](3)를 보더라도 하나의 객체 주변에 대해 많은 bounding box가 존재한다.
 
 이는 Non Maximal Suppresion을 통해 해결할 수 있다.
+
+Non Maximal Suppression에 대한 설명은 [아래](#52-non-maximal-suppresion)에 있습니다.
 
 ## 4. YOLO의 한계
 
