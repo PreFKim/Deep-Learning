@@ -256,7 +256,7 @@ $$
 이를 이용해 IoU 를 수식으로 표현하면 다음과 같다.
 
 $$
-IoU = \frac{dx \times dy} {Wa \times Ha + Wb \times Hb + dx \times dy}
+IoU = \frac{dx \times dy} {Wa \times Ha + Wb \times Hb - dx \times dy}
 $$
 
 
