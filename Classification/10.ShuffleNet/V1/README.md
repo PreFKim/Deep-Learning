@@ -6,13 +6,13 @@
 
 ShuffleNet은 모바일 디바이스를 위해 디자인 되었으며 매우 작은 computing power에서도 잘 작동한다(10~150 MFLOPs)
 
-ShuffletNet의 주요한 특징은 두개의 새로운 연산으로 구성되는데 pointwise group convolution과 channel shuffle로 이루어져있다.
+ShuffletNet의 주요한 특징은 새로운 연산인 pointwise group convolution과 channel shuffle 연산으로 이루어져있다.
 
 40 MFLOPs 아래의 computation 예산에서 MobileNet보다 성능이 좋았다.
 
 ARM based 모바일 디바이스에서 ShuffleNet은 정확성을 유지하며 AlexNet을 넘어 13배 빠른 속도를 냈다.
 
-기존에 있던 모델들을 줄이는 방법은 pruning,압축,low-bit 방법을 사용해서 줄였다.
+기존에 있던 모델들을 줄이는 방법은 pruning,압축,low-bit 방법이 있었다.
 
 Xception과 ResNeXt와 같은 SOTA모델들은 dense 1x1 conv를 사용하기 때문에 극도로 작은 network에서 덜 효율적으로 된다.
 
