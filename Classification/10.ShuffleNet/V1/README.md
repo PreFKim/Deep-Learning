@@ -74,7 +74,7 @@ channel shuffle 연산은 다중 group conv 레어와 함께 더 강력한 구�
 
 이러한 residual block에서 3x3layer를 3x3 depthwise conv로 대체하고 첫번째 1x1 layer를 pointwise group conv로 대체하고 이후에 channel shuffle 연산을 하도록 하였다.[fig2(b)]
 
-second pointwise group conv의 목적은 channel dimension을 shortcut path와 match 하기 위해 복구하는 것이다.
+second pointwise group conv의 목적은 줄어들었던 channel dimension을 shortcut path와 match 하기 위해 복구하는 것이다.
 
 추가적인 channel shuffle 연산을 두번째 pointwise 연산 이후에 적용할 필요 없다는 것이다.(넣는다고 해도 큰 결과차이는 얻기 힘듦)
 
