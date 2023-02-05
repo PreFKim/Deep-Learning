@@ -82,6 +82,8 @@ B=hw(c1)(c2)/g ,g는 그룹의 수
 
 ### 3.3 G3. Network fragmentation reduces degree of parallelism.
 
+![6](./img/afig1.PNG)
+
 하나의 큰 연산이 아닌 작은 연산들이 여러개 발생되면 속도가 느려진다.
 
 예를 들어 NASNET-A는 한 블록 내에서 개별적인 conv 연산과 pooling 연산의 수가 13개인 반면 ResNet에서는 2개 또는 3개이다.
@@ -92,7 +94,7 @@ Frangemented 구조가 정확도에는 이득일지는 몰라도 효율성에서
 
 각각의 블록은 1~4개 사이의 1x1conv 연산으로 이루어져 있고 이 블럭들을 10개 쌓아서 실험했다.
 
-![6](./img/table3.PNG)
+![6.1](./img/table3.PNG)
 
 
 ### 3.4 G4. Element-wise operations are non-negligible.
