@@ -8,7 +8,7 @@ def conv(input,features,kernel_size=3,strides = 1,padding='same',is_relu=True,is
     x = keras.activations.relu(x)
   return x
 
-def unet2(n_levels,DSV=True, initial_features=32, n_blocks=2, kernel_size=3, pooling_size=2, in_channels=1, out_channels=1):
+def unet2(n_levels,DSV=True, initial_features=64, n_blocks=2, kernel_size=3, pooling_size=2, in_channels=1, out_channels=1):
   inputs = keras.layers.Input(shape=(400, 400, in_channels))
   x = inputs
 
@@ -39,8 +39,7 @@ def unet2(n_levels,DSV=True, initial_features=32, n_blocks=2, kernel_size=3, poo
       list_concat.append(x)
 
       x = keras.layers.Concatenate()(list_concat)
-      for _ in range(n_blocks):
-        x = conv(x,initial_features * 2 ** level,3,1,'same')
+      x = conv(x,initial_features * 2 ** level,3,1,'same')
       skips[level].append(x)
           
   # 출력부분
@@ -65,3 +64,4 @@ def unet2(n_levels,DSV=True, initial_features=32, n_blocks=2, kernel_size=3, poo
   return keras.Model(inputs=[inputs], outputs=result, name=output_name)
 
 model = unet2(5,True)
+model.summary()
