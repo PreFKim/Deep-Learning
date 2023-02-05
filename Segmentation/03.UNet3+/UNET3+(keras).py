@@ -9,7 +9,7 @@ def conv(input,features,kernel_size=3,strides = 1,padding='same',is_relu=True,is
   return x
 
 
-def unet3(n_levels,DSV=True, initial_features=32, n_blocks=2, kernel_size=3, pooling_size=2, in_channels=1, out_channels=1):
+def unet3(n_levels,DSV=True, initial_features=64, n_blocks=2, kernel_size=3, pooling_size=2, in_channels=1, out_channels=1):
   inputs = keras.layers.Input(shape=(400, 400, in_channels))
   x = inputs
   
