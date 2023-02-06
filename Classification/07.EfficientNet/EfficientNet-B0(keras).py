@@ -1,4 +1,5 @@
 import keras
+
 def swish(x):
     return x* keras.activations.sigmoid(x)
 
@@ -16,7 +17,7 @@ def MBConv(input,e,kernel_size,out_channels,stride):
   x = swish(x)
 
   se = keras.layers.GlobalAvgPool2D()(x)
-  ex = keras.layers.Dense(int(in_channels*e/0.25))(se)
+  ex = keras.layers.Dense(int(in_channels*e/4))(se)
   ex = swish(ex)
   ex = keras.layers.Dense(in_channels*e)(ex)
   ex = keras.activations.sigmoid(ex)
@@ -28,7 +29,7 @@ def MBConv(input,e,kernel_size,out_channels,stride):
   x = keras.layers.BatchNormalization()(x)
 
   if stride == 1 and in_channels == out_channels:
-    x = keras.layers.Dropout(0.2)(x)
+    #x = keras.layers.Dropout(0.2)(x)
     x = keras.layers.add([input,x])
   return x
 

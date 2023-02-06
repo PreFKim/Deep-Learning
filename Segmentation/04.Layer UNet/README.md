@@ -101,7 +101,6 @@ X(2,2),X(3,1),X(4,0)블럭은 각각 scale을 2,4,8로 하여 upsample 연산을
 
 ![9](./img/power.PNG)
 
-
 ## 4.1 Dataset
 
 환자 3명의 치아 CBCT 데이터를 사용하여 Layer UNET을 학습하고 평가하였다. 
