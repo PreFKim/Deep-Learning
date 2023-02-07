@@ -100,4 +100,4 @@ class UNet2(nn.Module):
 
         return out 
 
-print(summary(UNet2(),(1,400,400)))
+summary(UNet2(),(1,400,400))
