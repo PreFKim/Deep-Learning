@@ -29,9 +29,7 @@ class LeNet_5(nn.Module):
         )
 
         self.fc2 = nn.Sequential(
-            nn.Linear(84,10),
-            nn.Softmax(1)
-            
+            nn.Linear(84,10)
         )
     def forward(self,x):
         c1 = self.c1(x)
