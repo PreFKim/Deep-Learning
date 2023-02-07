@@ -53,7 +53,7 @@ class MobileNet(nn.Module):
 
         self.FC = nn.Sequential(
             nn.Linear(1024,1000),
-            nn.Softmax()
+            nn.Softmax(1)
         )
 
     def forward(self,x):
@@ -66,5 +66,5 @@ class MobileNet(nn.Module):
 
         return out
 
-print(summary(MobileNet(),(3,224,224)))
+summary(MobileNet(),(3,224,224))
 

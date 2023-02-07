@@ -93,4 +93,4 @@ class UNet(nn.Module):
         out = self.result(dec1_1)
         return out 
 
-print(summary(UNet(),(1,400,400)))
+summary(UNet(),(1,400,400))

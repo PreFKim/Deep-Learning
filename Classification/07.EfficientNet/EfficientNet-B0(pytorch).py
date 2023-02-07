@@ -121,7 +121,7 @@ class EfficientNet(nn.Module):
 
         self.FC = nn.Sequential(
             nn.Linear(1280,1280),
-            nn.Softmax()
+            nn.Softmax(1)
         )
 
 
@@ -140,5 +140,4 @@ class EfficientNet(nn.Module):
 
         return out
 
-print(summary(EfficientNet(),(3,224,224)))
-        
+summary(EfficientNet(),(3,224,224))

@@ -54,7 +54,8 @@ class SqueezeNet(nn.Module):
 
         self.FC = nn.Sequential(
             nn.Conv2d(512,1000,1,1),
-            nn.AdaptiveAvgPool2d(1)
+            nn.AdaptiveAvgPool2d(1),
+            nn.Softmax(1)
         )
 
     def forward(self,x):
@@ -74,6 +75,6 @@ class SqueezeNet(nn.Module):
         
         output =self.FC(dropout)
 
-        return nn.Softmax(output)
+        return output
 
-print(summary(SqueezeNet(),(3,224,224)))
+summary(SqueezeNet(),(3,224,224))
