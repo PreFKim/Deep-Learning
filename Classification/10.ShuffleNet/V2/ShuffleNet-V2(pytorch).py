@@ -181,7 +181,7 @@ class ShuffleNet_V2(nn.Module):
 
         self.FC = nn.Sequential(
             nn.Linear(final,1000),
-            nn.Softmax()
+            nn.Softmax(1)
         )
 
     def forward(self,x):
@@ -195,24 +195,5 @@ class ShuffleNet_V2(nn.Module):
         out = self.FC(out)
         return out
 
-print(summary(ShuffleNet_V2(),(3,224,224)))
-            nn.AdaptiveAvgPool2d(1)
-        )
 
-        self.FC = nn.Sequential(
-            nn.Linear(final,1000),
-            nn.Softmax()
-        )
-
-    def forward(self,x):
-        out = self.conv1(x)
-        out = self.stage1(out)
-        out = self.stage2(out)
-        out = self.stage3(out)
-        out = self.conv2(out)
-
-        out = out.view(out.size(0),-1)
-        out = self.FC(out)
-        return out
-
-print(summary(ShuffleNet_V2(),(3,224,224)))
+summary(ShuffleNet_V2(),(3,224,224))
