@@ -121,7 +121,7 @@ class EfficientNet(nn.Module):
 
         self.FC = nn.Sequential(
             nn.Linear(1280,1280),
-            nn.Softmax()
+            nn.Softmax(1)
         )
 
 
