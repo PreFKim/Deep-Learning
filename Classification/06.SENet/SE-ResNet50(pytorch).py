@@ -99,8 +99,7 @@ class SE_ResNet50(nn.Module):
         self.F = nn.AdaptiveAvgPool2d(1)
 
         self.FC = nn.Sequential(
-            nn.Linear(512*e,1000),
-            nn.Softmax(1)
+            nn.Linear(512*e,1000)
         )
 
     def forward(self,x):

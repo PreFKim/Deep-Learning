@@ -44,8 +44,7 @@ class AlexNet(nn.Module):
             nn.Dropout(0.5)
         )
         self.output = nn.Sequential(
-            nn.Linear(4096,1000),
-            nn.Softmax(1)
+            nn.Linear(4096,1000)
         )
 
     def forward(self,x):

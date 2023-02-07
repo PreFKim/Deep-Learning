@@ -75,8 +75,7 @@ class DenseNet(nn.Module):
     self.stage4 = dense_block(int(out_stage3*compression),num_layers[3])
     self.pool = nn.AdaptiveAvgPool2d(1)
     self.FC = nn.Sequential(
-        nn.Linear(out_stage4,1000),
-        nn.Softmax(1)
+        nn.Linear(out_stage4,1000)
     )
 
   def forward(self,x):

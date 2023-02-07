@@ -52,8 +52,7 @@ class MobileNet(nn.Module):
         )
 
         self.FC = nn.Sequential(
-            nn.Linear(1024,1000),
-            nn.Softmax(1)
+            nn.Linear(1024,1000)
         )
 
     def forward(self,x):

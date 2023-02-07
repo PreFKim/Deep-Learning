@@ -95,8 +95,7 @@ class ShuffleNet(nn.Module):
         )
 
         self.FC = nn.Sequential(
-            nn.Linear(channels*4,1000),
-            nn.Softmax(1)
+            nn.Linear(channels*4,1000)
         )
 
     def forward(self,x):

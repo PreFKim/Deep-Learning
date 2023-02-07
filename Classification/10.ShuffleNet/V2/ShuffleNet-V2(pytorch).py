@@ -180,8 +180,7 @@ class ShuffleNet_V2(nn.Module):
         )
 
         self.FC = nn.Sequential(
-            nn.Linear(final,1000),
-            nn.Softmax(1)
+            nn.Linear(final,1000)
         )
 
     def forward(self,x):
