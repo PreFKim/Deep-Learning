@@ -96,7 +96,7 @@ class ShuffleNet(nn.Module):
 
         self.FC = nn.Sequential(
             nn.Linear(channels*4,1000),
-            nn.Softmax()
+            nn.Softmax(1)
         )
 
     def forward(self,x):
@@ -109,4 +109,4 @@ class ShuffleNet(nn.Module):
         out = self.FC(out)
         return out
 
-print(summary(ShuffleNet(),(3,224,224)))
+summary(ShuffleNet(),(3,224,224))
