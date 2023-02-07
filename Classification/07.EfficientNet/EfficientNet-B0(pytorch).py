@@ -140,5 +140,4 @@ class EfficientNet(nn.Module):
 
         return out
 
-print(summary(EfficientNet(),(3,224,224)))
-        
+summary(EfficientNet(),(3,224,224))
