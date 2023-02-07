@@ -83,4 +83,4 @@ class yolo(nn.Module):
         
         out[:,b*5:,:,:] = self.softmax(out[:,b*5:,:,:])
 
-print(summary(yolo(),(3,448,448)))
+summary(yolo(),(3,448,448))
