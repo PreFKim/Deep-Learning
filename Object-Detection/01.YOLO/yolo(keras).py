@@ -1,5 +1,6 @@
 import keras
 
+
 def conv(input,chennel,kernel_sizes,strides=2,padding='valid',is_lrelu=True,is_bn=True):
   x = input
   x = keras.layers.Conv2D(chennel,kernel_sizes,strides,padding=padding)(x)
@@ -50,8 +51,13 @@ def YOLO(s=7,b=2,c=20):
     x = keras.layers.Dense(s*s*(b*5+c))(x)
 
     x = keras.layers.Reshape((s,s,(b*5+c)))(x)
+    print(x.shape)
+    localization = x[:,:,:,:b*5]
+    classification = keras.activations.softmax(x[:,:,:,b*5:])
 
-    return keras.Model(inputs=input,outputs=x,name='YOLO')
+    output = keras.layers.Concatenate()([localization,classification])
+
+    return keras.Model(inputs=input,outputs=output,name='YOLO')
 
 model = YOLO()
 model.summary()

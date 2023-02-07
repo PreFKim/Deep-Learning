@@ -56,6 +56,7 @@ class yolo(nn.Module):
             nn.Linear(4096,s*s*(b*5+c))
         )
         self.pool = nn.MaxPool2d(2,2)
+        self.softmax = nn.Softmax(1)
 
     def forward(self,x):
         s = self.s
@@ -78,7 +79,8 @@ class yolo(nn.Module):
 
         out = self.FC(out)
 
-        out = out.view(out.size(0),s,s,(b*5+c))
-
+        out = out.view(out.size(0),(b*5+c),s,s)
+        
+        out[:,b*5:,:,:] = self.softmax(out[:,b*5:,:,:])
 
 print(summary(yolo(),(3,448,448)))
