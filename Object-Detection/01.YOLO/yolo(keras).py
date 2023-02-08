@@ -51,13 +51,9 @@ def YOLO(s=7,b=2,c=20):
     x = keras.layers.Dense(s*s*(b*5+c))(x)
 
     x = keras.layers.Reshape((s,s,(b*5+c)))(x)
-    print(x.shape)
-    localization = x[:,:,:,:b*5]
-    classification = keras.activations.softmax(x[:,:,:,b*5:])
+    
 
-    output = keras.layers.Concatenate()([localization,classification])
-
-    return keras.Model(inputs=input,outputs=output,name='YOLO')
+    return keras.Model(inputs=input,outputs=x,name='YOLO')
 
 model = YOLO()
 model.summary()
