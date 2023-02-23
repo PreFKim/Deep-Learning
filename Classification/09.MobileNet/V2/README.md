@@ -5,8 +5,6 @@
 
 ## 1. MobileNet V2 특징
 
----
-
 기존의 Residual structure와는 다른 Inverted Residual structure를 제안하였다.
 
 특히 ReLU함수와 같은 비선형변환 함수를 사용함에 따라 정보의 손실이 발생하는 경우가 있는데 이 점을 활용해 일부분에 비선형 변환을 적용하지 않으며 성능을 향상 시켰다.
@@ -17,11 +15,7 @@ Mobile Net과 비슷하게 연산의 수를 줄이면서 메모리 사용량을 
 
 ## 2. 
 
----
-
 ## 2.1 Depthwise Separable Convolution
-
----
 
 Depthwise Separable Convolution에 대한 내용은 이전에 MobileNet V1에 대한 내용에 있습니다.
 
@@ -29,11 +23,9 @@ Depthwise Separable Convolution에 대한 내용은 이전에 MobileNet V1에 �
 
 ## 2.2 Linear Bottleneck
 
----
 
 ### 2.2.1 Dimensional Space
 
----
 
 우선 본 논문의 Linear Bottleneck 부분에 대해서 이해하기 위해서는 고차원의 정보와 저차원의 정보에 대해서 이해를 해야한다.(low-dimensional space,high-dimensional space)
 
