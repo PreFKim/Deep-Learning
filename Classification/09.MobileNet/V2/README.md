@@ -13,16 +13,13 @@ Mobile Net과 비슷하게 연산의 수를 줄이면서 메모리 사용량을 
 
 ---
 
-## 2. 
+## 2. Feature of MobileNet V2
 
 ## 2.1 Depthwise Separable Convolution
 
 Depthwise Separable Convolution에 대한 내용은 이전에 MobileNet V1에 대한 내용에 있습니다.
 
----
-
 ## 2.2 Linear Bottleneck
-
 
 ### 2.2.1 Dimensional Space
 
