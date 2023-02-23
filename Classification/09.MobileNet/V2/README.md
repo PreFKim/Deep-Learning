@@ -15,7 +15,7 @@ Mobile Net과 비슷하게 연산의 수를 줄이면서 메모리 사용량을 
 
 ## 2. Feature of MobileNet V2
 
----
+이 부분은 MobileNet V2의 주요 특징에 대해서 다루려고 합니다.
 
 ## 2.1 Depthwise Separable Convolution
 
