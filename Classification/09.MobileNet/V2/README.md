@@ -186,6 +186,109 @@ Inverted Residual block 전체의 computational cost는 아래와 같다.
 
 ![7](./img/table3.PNG)
 
+## 2.4 Information flow interpretation
+
+위 에서 말한 구조적 특성때문에 자연스럽게 Bottleneck 레이어들의 입출력 domain와 레이어 변환(Non-linear function)을 분리 할 수 있게 되었다.
+
+전자는 각각의 레이어에서의 네트워크 성능이라고 볼 수 있고 반면에 후자는 표현력이라고 볼 수 있다.
+
+표현력과 성능이 분리할 수 없는 것과 function of the output layer depth(?)라는 것에서 기존의 conv block과의 차이점이다.
+
+특히 Inner 레이어 깊이가 0이 된다면 기존의 연산은 shortcut connection 덕분에 항등 함수가 된다.
+
+이 얘기는 기존에 식이 F(x)=ReLU(f(x)+x)라고 했다면 본 논문은 G(x)= g(x)+x이므로 (g(x)내에만 relu함수가 있기 때문에 만약 g(x)의 깊이가 0(아무 함수도 없다면) G(x)=x가 된다라고 이해 했다.
+
+이러한 분리에 대한 이해는 네트워크의 특성을 더 쉽게 이해할 수 있게 해준다.
+
+---
+
+## 3. Model Architecture
+
+MobileNet 구조적 detail은 다음과 같다.
+
+- 초기의 Fully Convolution layer는 32개의 filter를 사용하고 이후에 19개의 Residual Bottleneck 레이어를 사용한다. 
+
+- 기존의 ReLU함수 대신 ReLU6 함수를 사용했는데 이는 low-precison computation에서 사용될 때를 위해서 사용하였다 식은 다음과 같다.
+
+$$
+ReLU6(x)= max(0,min(x,6))
+$$
+
+- 현대의 network들과 동일하게 3x3 kernel size의 conv 연산을 사용하고 dropout과 BatchNorm을 사용하였다.
+
+- 첫 레이어르 제외한 나머지 레이어는 expansion rate 상수를 사용하였다. 본 실험에서는 5~10 정도의 expansion rate에서 성능이 좋았다.(작은 넥트워크에서는 약간 작은게 더 낫고 큰 네트워크에서는 큰게 더 나았다.)
+
+- 본 논문에서 사용한 expansion rate는 6으로 고정하였다 예를들면 64개의 채널을 입력으로 하고 출력 채널은 128로 한다면 채널 수의 변화 과정은 64 -> 384(64*6) -> 128이 된다.
+
+자세한 구현은 다음과 같다.
+
+![8](./img/table2.PNG)
+
+t는 expansion rate  c는 채널 수 n은 반복횟수 s는 첫 번째 반복에서의 stride 수다.
+
+## 3.1 Hyper parameters ( Width Multiplier )
+
+MobileNet V1과 동일하게 Width multiplier를 사용하였다.
+
+MobileNet V2는 주로 Width multiplier는 1 해상도는 224x224를 사용하였디.
+
+이러한 width multiplier와 해상도를 각각 0.35~1.4 , 96~224로 하여 성능을 trade off 했다.
+
+MobileNet V1과의 구현의 차이는 Width Multiplier를 1보다 작게 설정하였고 마지막 Conv layer를 제외한 모든 레이어에 적용하였다.
+
+이는 작은 모델에서 성능 향상을 이뤄냈다.
+
+## 4. Memory Efficient Inference
+
+이 부분에서는 computation을 최소화하는 식과 이를 어떻게 간소화 하는지를 나타내지만 이부분은 자세히 보지 않고 Bottleneck Residual Block부분을 볼 것입니다.
+
+Inverted Residual Bottleneck 레이어는 mobile 장치에서 많이 중요한 memory efficient 구현이다.
+
+Inverted Residual Bottleneck 은 다음과 같은 식으로 구성될 수 있다.
+
+![9](./img/eqnIRB.PNG)
+
+이때 A, N과 B는 다음과 같다.
+
+A는 선형 변환으로 SxSxk 를 SxSxn으로 변환하고
+
+N은 비선형 채널별 변환(Depthwise conv연산이기 때문에)으로 SxSxn 을 S'xS'xn으로 변환한다.
+
+B는 출력 domain으로의 선형 변환으로 S'xS'xn을 S'xS'xk'으로 변환한다.
+
+이때 MobileNet V2에서 N은 다음과 같다.
+
+![10](./img/eqnN.PNG)
+
+F(x) 연산에서 필요한 최소 메모리는 다음과 같이 표현될 수 있다.
+
+$$
+|S^2 * k| + |S'^2 * k'| + O(max(s^2,s'^2))
+$$
+
+이때 내부 tensor L이 n/t사이즈의 t개의 tensor의 concatenation이라고 볼 때 F(x)는 다음과 같이 표현될 수 있다.
+
+![11](./img/eqnIRB2.PNG)
+
+이런 경우 중간 블록 N에서 block의 크기는 n/t만큼만 메모리에 저장되면 된다.
+
+n==t인 경우에는 오직 하나의 중간 채널만 메모리에 저장되면 된다.
+
+아래의 두 경우 때문에 위의 방법이 가능하게 되었다.
+
+- 내부 변환(비선형 변환과 depthwise conv을 포함하여)이 채널별(per-channel) 연산인점
+
+- 이어지는 non per channel 연산은 상당한 입출력 크기 비율을 가진다.
+
+이런 방식은 성능 향상을 이뤄내지 못했다.
+
+F(x)를 t개로 나누어 연산하는 것의 연산의 수는 t에대해 독립적이다.(영향을 주지 않는다.)
+
+그러나 더 작게 나누어 matrix multiplication을 하는 것은 cache miss의 증가로 인해 실행시간에 악영향을 준다.
+
+이러한 접근법은 t가 2~5사이의 작은 수일 때 도움이 된다.
+
+이는 memory 필요량을 줄이게 된다.
 
 ---
 
