@@ -125,17 +125,18 @@ Bottleneck block이 기존의 residual block과 비슷하다.
 
 이러한 생각은 residual block에서 bottleneck 레이어가 중요한 정보를 가지고 있다고 생각하고 expansion 레이어는 비선형 변환과 함께 구현에 필요한 연산을 하는 것이라는 생각을 기반으로 Inverted residual block을 구현하였다.
 
+---
+
 ### 2.3.1 Residual block vs Inverted Residual block
+
+---
 
 아래의 그림은 두 구조의 다른 점을 보여준다.
 
 ![3](./img/fig3.PNG)
 
-본 그림에서 빗금이 그려진 부분은 non-linear function을 사용하지 않는 부분이다.
 
-두꺼운 정도는 채널의 크기를 보여준다.
-
-이때 Residual Block의 특징은 다음과 같다.
+기존의 Residual Block의 특징은 다음과 같다.
 
 ![3.1](./img/Resnet.PNG)
 
@@ -151,12 +152,15 @@ Bottleneck block이 기존의 residual block과 비슷하다.
 
 즉, 늘림->연산->좁힘 방식의 연산이고 기존의 Residual block과는 반대되는 특징을 가져 Inverted residual block이라 하는 것이다.
 
+---
 
 ### 2.3.2 Linear bottleneck
 
+---
+
 Residual block과 Inverted Residual block의 또 다른 차이점은 비선형 변환을 사용하는 레이어도 있고 사용하지 않는 레이어도 있다는 것이다.
 
-[### Information Loss](#information-loss) 에서 보면 비교적 작은 차원으로 전환한 후에 ReLU함수를 적용하는 경우에 정보의 손실이 발생한다고 하였다.
+[Information Loss](#information-loss) 에서 보면 비교적 작은 차원으로 전환한 후에 ReLU함수를 적용하는 경우에 정보의 손실이 발생한다고 하였다.
 
 이는 Inverted Residual block에서 발생할 수 있는데 Bottleneck 레이어의 경우 원래의 채널보다 적은 수의 채널로 전환을 하기 때문에 여기에 비선형 변환을 적용하게 될 경우 정보의 손실이 발생할 수 있다는 것이다.
 
@@ -166,7 +170,11 @@ Linear Bottleneck을 사용 여부에 따라 성능 비교는 아래와 같다.
 
 ![4](./img/fig6.PNG)
 
+---
+
 ### 2.3.3 Computational Cost
+
+---
 
 기존의 Depthwise Separable Conv 연산의 computational cost는 아래와 같다.
 
@@ -188,7 +196,7 @@ Inverted Residual block 전체의 computational cost는 아래와 같다.
 
 ## 2.4 Information flow interpretation
 
-위 에서 말한 구조적 특성때문에 자연스럽게 Bottleneck 레이어들의 입출력 domain와 레이어 변환(Non-linear function)을 분리 할 수 있게 되었다.
+위 에서 말한 구조적 특성때문에 자연스럽게 Bottleneck 레이어들의 입출력 domain과 레이어 변환(Non-linear function)을 분리 할 수 있게 되었다.
 
 전자는 각각의 레이어에서의 네트워크 성능이라고 볼 수 있고 반면에 후자는 표현력이라고 볼 수 있다.
 
@@ -232,7 +240,7 @@ MobileNet V1과 동일하게 Width multiplier를 사용하였다.
 
 MobileNet V2는 주로 Width multiplier는 1 해상도는 224x224를 사용하였디.
 
-이러한 width multiplier와 해상도를 각각 0.35~1.4 , 96~224로 하여 성능을 trade off 했다.
+이러한 width multiplier와 해상도를 각각 0.35 ~ 1.4 , 96 ~ 224로 하여 성능을 trade off 했다.
 
 MobileNet V1과의 구현의 차이는 Width Multiplier를 1보다 작게 설정하였고 마지막 Conv layer를 제외한 모든 레이어에 적용하였다.
 
