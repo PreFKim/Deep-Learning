@@ -39,7 +39,7 @@
 
 ---
 
-### 2.2 MobileNet V2
+### MobileNet V2
 
 ---
 
@@ -49,7 +49,7 @@ MobileNet V1의 Depthwise Separable Conv 연산과 Residual block을 결합하�
 
 ---
 
-### 2.3 MnasNet
+### MnasNet
 
 ---
 
