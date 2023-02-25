@@ -256,6 +256,8 @@ $$
 
 SE blokc의 크기는 bottleneck의 크기와 연관되어 있는데 이러한 크기를 expansion 레이어의 채널의 1/4로 고정하였다.
 
+즉, SEBlock의 중간 과정에서 채널을 줄이는 과정에서 expansion 레이어 채널의 1/4로 줄인다는 것이다.
+
 이렇게 하는 것이 정확도를 향상시키고 지연시간을 크게 증가시키지 않는다.
 
 ### 4.4 MobileNetV3 Definition
