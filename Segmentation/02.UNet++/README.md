@@ -62,7 +62,7 @@ Pruning은 Fig1에서 C부분을 보면 확인할 수 있고 다양한 Pruning�
 
 ## 4. Dice-Cross entrophy
 
-UNet++에서는 Binary Cross Entrophy loss와 dice coeifficient를 결합해 Loss 함수로 사용하엿고 그 식은 아래와 같다.
+UNet++에서는 Binary Cross Entrophy loss와 dice coeifficient를 결합해 Loss 함수로 사용하였고 그 식은 아래와 같다.
 
 ![4](./img/eqn2.PNG)
 
