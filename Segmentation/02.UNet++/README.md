@@ -49,5 +49,21 @@ accurate mode: 모든 출력을 평균을 내어 사용하는 것
 
 fast mode:마지막 출력만을 사용하는 것
 
-fig 3는 다양한 pruning에서 deep supervision을 어떻게 사용하는지 보여준다.
+---
+
+Pruning
+
+---
+
+Pruning은 Fig1에서 C부분을 보면 확인할 수 있고 다양한 Pruning에서의 성능 수치는 ㄷ다음과 같다.
+
+![3](./img/fig3.PNG)
+
+
+## 4. Dice-Cross entrophy
+
+UNet++에서는 Binary Cross Entrophy loss와 dice coeifficient를 결합해 Loss 함수로 사용하엿고 그 식은 아래와 같다.
+
+![4](./img/eqn2.PNG)
+
 ---
