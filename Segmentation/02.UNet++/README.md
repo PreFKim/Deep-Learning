@@ -55,7 +55,7 @@ Pruning
 
 ---
 
-Pruning은 Fig1에서 C부분을 보면 확인할 수 있고 다양한 Pruning에서의 성능 수치는 ㄷ다음과 같다.
+Pruning은 Fig1에서 C부분을 보면 확인할 수 있고 다양한 Pruning에서의 성능 수치는 다음과 같다.
 
 ![3](./img/fig3.PNG)
 
