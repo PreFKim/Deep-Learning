@@ -62,7 +62,7 @@ DropOut을 0.5의 비율로 한다.
 
 1x1 conv를 통해 두개의 채널로 줄여준다(물체가 있다 없다를 판단하기 위해)
 
-AdaptiveMaxPool을 적용한다(GlobalMaxPool을 적용해도 됨)[나는 GlobalAvgPool을 적용하고 싶음]
+AdaptiveMaxPool을 적용한다(keras에서는 GlobalMaxPool을 적용)
 
 이후 Sigmoid를 각각 적용한다.(왜 SoftMax가 아닌지 이해가 안됨)
 
