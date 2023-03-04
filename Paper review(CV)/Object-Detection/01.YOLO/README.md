@@ -206,11 +206,15 @@ YOLO 모델은 기존 모델들과 다르게 회귀문제로 Detection을 해내
 
 ![6](./img/eqn3.PNG)
 
-이때 식에서 1(obj,i)는 cell i에서 객체가 있음을 의미하고 1(obj,(i,j))는 i번째 cell에서 j번째 bounding box가 해당 예측에 대한 "responsible"을 의미한다..
+이때 식에서 1(obj,i)는 cell i에서 객체가 있음을 의미하고 1(obj,(i,j))는 i번째 cell에서 j번째 bounding box가 해당 예측에 대한 "responsible"을 의미한다.
+
+풀어서 말하면 1(obj,i)는 객체가 있을 때 값이 1이고 없을 때, 1(obj,(i,j))는 i번째 cell에서 j번째 box가 responsible일 때 1이라는 의미이다(나머지는 0).
+
+반대로 1(noobj,(i,j))는 객체가 없을 때 1이고 있을 때는 0이다.
 
 객체가 있다고 판별하는 경우에 대해서 loss를 구할때는 responsible 정보만을 사용하면 되지만
 
-객체가 없다고 판별하는 경우에는 모든 bounding box의 정보를 사용해서 loss를 구해야한다.
+객체가 없다고 판별하는 경우에는 repsonsible이 아닌 정보를 사용해서 loss를 구해야한다.
 
 위 식에서 각각의 줄은 다음을 의미한다
 1. Bounding box의 중심좌표 차이에 대한 Loss (localization) [Reponsible]
@@ -219,9 +223,9 @@ YOLO 모델은 기존 모델들과 다르게 회귀문제로 Detection을 해내
 
 3. 객체가 있는 경우의 Confidence Score 차이에 대한 Loss(confidence) [Reponsible]
 
-4. 객체가 없는 경우의 Confidence Score 차이에 대한 Loss(confidence) [All]
+4. 객체가 없는 경우의 Confidence Score 차이에 대한 Loss(confidence) [No Responsible]
 
-5. 각 클래스 값 차이에 대한 Loss(classification)
+5. 각 클래스 값 차이에 대한 Loss(classification) 
 
 ---
 
