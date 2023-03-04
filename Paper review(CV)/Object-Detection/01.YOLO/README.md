@@ -324,7 +324,9 @@ Object Detection을 수행한 결과를 확인해보면 아래의 그림처럼 �
 이러한 여러 Bounding box 중에서 객체를 잘 보여주는 Box를 제외한 나머지 박스를 제외시켜주는 것이 NMS라고 할 수 있다.
 
 NMS알고리즘은 다음과 같다.
+
 입력(I) : Bounding box들,Confidence threshold,IoU threshold
+
 출력(O) : 선택된 box들
 
 1. I에서 Bounding box별로 Confidence threshold 이하의 Box는 제거한다.
