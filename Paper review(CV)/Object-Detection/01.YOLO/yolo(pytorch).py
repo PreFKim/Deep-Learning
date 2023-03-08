@@ -15,10 +15,10 @@ class yolo(nn.Module):
                 nn.LeakyReLU()
             )
             return layers
-        self.conv1 = cbl(3,192,7,2,3)
-        self.conv2 = cbl(192,256,3,1,1)
+        self.conv1 = cbl(3,64,7,2,3)
+        self.conv2 = cbl(64,192,3,1,1)
         self.conv3 = nn.Sequential(
-            cbl(256,128,1,1),
+            cbl(192,128,1,1),
             cbl(128,256,3,1,1),
             cbl(256,256,1,1),
             cbl(256,512,3,1,1)
